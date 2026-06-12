@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edison Liu — Engineer & Developer</title>
+
+  <meta name="description" content="Edison Liu — Electronic & Computer Engineering student at ZJU-UIUC. I build AI agents, automation pipelines, and web apps, and I work close to the hardware." />
+  <meta name="author" content="Edison Liu" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Edison Liu — Engineer & Developer" />
+  <meta property="og:description" content="I build AI agents, automation pipelines, and web apps — from the hardware up." />
+  <meta property="og:url" content="https://edison9733.github.io/mewebsite/" />
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============ SKIP LINK (accessibility) ============ -->
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#top" class="nav__brand">
+        <span class="nav__mark">EL</span>
+        <span class="nav__name">Edison Liu</span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="nav__toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav__mobile" id="navMobile" aria-label="Mobile">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top">
+      <div class="wrap">
+        <p class="eyebrow reveal">Electronic &amp; Computer Engineering · ZJU-UIUC Institute</p>
+        <h1 class="hero__title reveal">
+          I build software that works —<br />
+          <span class="hero__title-accent">from the hardware up.</span>
+        </h1>
+        <p class="hero__lead reveal">
+          I'm Edison Liu. I design and ship AI agents, automation pipelines, and web
+          apps, and I understand the layers underneath them — circuits, logic gates,
+          and embedded systems. I don't just patch the surface.
+        </p>
+        <div class="hero__actions reveal">
+          <a href="#projects" class="btn btn--solid">View projects</a>
+          <a href="#contact" class="btn btn--ghost">Get in touch</a>
+        </div>
+        <ul class="hero__meta reveal">
+          <li><span class="hero__meta-k">Focus</span> AI · Automation · Web3</li>
+          <li><span class="hero__meta-k">Stack</span> Python · JS/TS · React · Rust</li>
+          <li><span class="hero__meta-k">Based</span> [Your city / region]</li>
+        </ul>
+      </div>
+      <div class="hero__scroll" aria-hidden="true">
+        <span>Scroll</span>
+        <span class="hero__scroll-line"></span>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="section" id="about">
+      <div class="wrap">
+        <div class="section__head">
+          <span class="section__index">01</span>
+          <h2 class="section__title">About</h2>
+        </div>
+        <div class="about__grid">
+          <div class="about__lead reveal">
+            <p>
+              I'm an Electronic and Computer Engineering student at the ZJU-UIUC
+              Institute — a joint programme between Zhejiang University and the
+              University of Illinois Urbana-Champaign.
+            </p>
+            <p>
+              My background is unusual for someone who builds software: I came up
+              through hardware. I've built a motorised car from a bare breadboard,
+              designed a working vending machine out of nothing but NAND gates, and
+              led a summer research team on ultracold atomic physics. That means when
+              I write software, I understand what's happening all the way down.
+            </p>
+            <p>
+              Right now I work AI-native. My day-to-day build environment runs on
+              Claude Code with MCP connectors, version-controlled to GitHub, with
+              human approval gates before anything touches a live system. I use that
+              setup to design, generate, and review code end to end — while owning the
+              requirements, integration, and verification myself.
+            </p>
+            <p class="about__note">
+              [Add a sentence or two in your own voice here — what you care about,
+              what you're aiming for, or what you're learning next.]
+            </p>
+          </div>
+          <aside class="about__side reveal">
+            <figure class="about__photo">
+              <img src="assets/edison.jpg" alt="Edison Liu" width="756" height="1008" loading="lazy" />
+            </figure>
+            <div class="about__card">
+              <h3>Education</h3>
+              <dl>
+                <div>
+                  <dt>ZJU-UIUC Institute</dt>
+                  <dd>B.Eng. Electronic &amp; Computer Engineering</dd>
+                  <dd class="muted">2025 – Present</dd>
+                </div>
+                <div>
+                  <dt>Cambridge International A-Levels</dt>
+                  <dd>Further Maths, Maths, Physics, Chemistry — A in all four</dd>
+                  <dd class="muted">2022 – 2024</dd>
+                </div>
+              </dl>
+            </div>
+            <div class="about__card">
+              <h3>Certifications</h3>
+              <dl>
+                <div>
+                  <dt>CS50x — Harvard</dt>
+                  <dd>Computer Science foundation · 133 commits public</dd>
+                </div>
+                <div>
+                  <dt>Machine Learning Specialization</dt>
+                  <dd>Stanford Online / Coursera (Andrew Ng)</dd>
+                </div>
+              </dl>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROJECTS ============ -->
+    <section class="section section--alt" id="projects">
+      <div class="wrap">
+        <div class="section__head">
+          <span class="section__index">02</span>
+          <h2 class="section__title">Projects</h2>
+        </div>
+        <p class="section__lead reveal">
+          A mix of software and hardware. Each one I took from idea to working build.
+        </p>
+
+        <div class="projects">
+
+          <!-- Project 1 -->
+          <article class="project reveal">
+            <div class="project__top">
+              <span class="project__tag">AI / Software</span>
+              <span class="project__year">2026 – Present</span>
+            </div>
+            <h3 class="project__title">AI-Native Development Workspace</h3>
+            <p class="project__desc">
+              An end-to-end AI build environment in VS Code using Claude Code as the
+              primary engine, version-controlled to GitHub. Configured portable Claude
+              Skills (reusable instruction modules) and integrated MCP connectors so
+              agents act directly on external tools and APIs — with human approval
+              gates before any external action.
+            </p>
+            <ul class="project__stack">
+              <li>Claude Code</li><li>Claude Skills</li><li>MCP</li><li>Git</li>
+            </ul>
+            <div class="project__links">
+              <a href="[repo or demo link]" class="link-arrow">Live demo on request <span>→</span></a>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project reveal">
+            <div class="project__top">
+              <span class="project__tag">Embedded / Hardware</span>
+              <span class="project__year">Course project</span>
+            </div>
+            <h3 class="project__title">Arduino Car with Pre-Crash Auto-Brake</h3>
+            <p class="project__desc">
+              A motorised car built from scratch on breadboard. Engineered the full
+              drive chain — MOSFET motor drivers, potentiometer speed/steering control,
+              flyback diodes for back-EMF protection — and conditioned the noisy signal
+              with a Schmitt trigger. Programmed the Arduino to poll an ultrasonic
+              sensor in real time and brake autonomously before a collision.
+            </p>
+            <ul class="project__stack">
+              <li>Embedded C/C++</li><li>Ultrasonic sensing</li><li>Analog design</li>
+            </ul>
+            <div class="project__links">
+              <a href="[repo or video link]" class="link-arrow">Details <span>→</span></a>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="project reveal">
+            <div class="project__top">
+              <span class="project__tag">Digital Logic</span>
+              <span class="project__year">Course project</span>
+            </div>
+            <h3 class="project__title">Vending Machine from NAND Gates Only</h3>
+            <p class="project__desc">
+              A fully working vending machine built using only NAND gates, exploiting
+              functional completeness. Coin counting, item selection, and dispensing
+              logic implemented from first principles — both combinational and
+              sequential state-holding circuits designed by hand.
+            </p>
+            <ul class="project__stack">
+              <li>Digital logic</li><li>Finite-state machines</li><li>From first principles</li>
+            </ul>
+            <div class="project__links">
+              <a href="[repo or writeup link]" class="link-arrow">Details <span>→</span></a>
+            </div>
+          </article>
+
+          <!-- Project 4 -->
+          <article class="project reveal">
+            <div class="project__top">
+              <span class="project__tag">Research</span>
+              <span class="project__year">Team lead</span>
+            </div>
+            <h3 class="project__title">Summer Research — Bose–Einstein Condensates</h3>
+            <p class="project__desc">
+              Led a student team through a summer research programme on BEC and
+              ultracold atomic physics. Scoped the work, coordinated workloads across
+              members, and presented the team's findings — early proof of technical
+              leadership and clear communication.
+            </p>
+            <ul class="project__stack">
+              <li>Ultracold physics</li><li>Team leadership</li><li>Research</li>
+            </ul>
+            <div class="project__links">
+              <a href="[link if any]" class="link-arrow">Details <span>→</span></a>
+            </div>
+          </article>
+
+        </div>
+
+        <p class="projects__more reveal">
+          More on GitHub —
+          <a href="https://github.com/edison9733" class="link-inline">github.com/edison9733</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ SKILLS ============ -->
+    <section class="section" id="skills">
+      <div class="wrap">
+        <div class="section__head">
+          <span class="section__index">03</span>
+          <h2 class="section__title">Skills</h2>
+        </div>
+
+        <div class="skills">
+          <div class="skills__col reveal">
+            <h3 class="skills__label">Languages</h3>
+            <ul class="chips">
+              <li>C</li><li>Python</li><li>C++</li><li>JavaScript</li>
+              <li>TypeScript</li><li>SQL</li><li>HTML/CSS</li><li>MATLAB</li>
+            </ul>
+          </div>
+
+          <div class="skills__col reveal">
+            <h3 class="skills__label">AI &amp; Automation</h3>
+            <ul class="chips">
+              <li>AI Agent Development</li><li>Prompt Engineering</li>
+              <li>Claude Code</li><li>Claude Skills</li><li>MCP Connectors</li>
+              <li>Generative AI</li><li>Automation Pipelines</li><li>API Integration</li>
+            </ul>
+          </div>
+
+          <div class="skills__col reveal">
+            <h3 class="skills__label">Web &amp; Frameworks</h3>
+            <ul class="chips">
+              <li>React</li><li>Next.js</li><li>Full-Stack Development</li>
+              <li>Web3</li><li>Solana</li><li>Blockchain</li><li>Rust</li>
+            </ul>
+          </div>
+
+          <div class="skills__col reveal">
+            <h3 class="skills__label">Hardware &amp; Tools</h3>
+            <ul class="chips">
+              <li>Arduino</li><li>MOSFETs</li><li>Op-amps</li><li>Logic gates</li>
+              <li>Oscilloscope</li><li>Git</li><li>Linux/Unix</li><li>VS Code</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SERVICES ============ -->
+    <section class="section section--dark" id="services">
+      <div class="wrap">
+        <div class="section__head">
+          <span class="section__index">04</span>
+          <h2 class="section__title">What I can build for you</h2>
+        </div>
+        <p class="section__lead reveal">
+          Available for freelance and project work. If a task can be automated or
+          handed to an AI agent, I can build it.
+        </p>
+
+        <div class="services">
+          <article class="service reveal">
+            <h3>AI agents &amp; chatbots</h3>
+            <p>Built to actually work in production, not just demo. Prompt engineering, tool use, and approval gates before anything goes live.</p>
+          </article>
+          <article class="service reveal">
+            <h3>Automation pipelines</h3>
+            <p>Connect your tools and kill repetitive work. MCP connectors wiring AI into real APIs and services.</p>
+          </article>
+          <article class="service reveal">
+            <h3>Web apps &amp; dashboards</h3>
+            <p>Front to back — Python, JavaScript, React, Next.js. Clean, responsive, and maintainable.</p>
+          </article>
+          <article class="service reveal">
+            <h3>Web3 &amp; dApps</h3>
+            <p>Solana, Rust, and dApp frontends. The same AI and automation edge, applied to crypto projects.</p>
+          </article>
+        </div>
+
+        <div class="services__cta reveal">
+          <div>
+            <p class="services__rate">[$15]/hr <span>· starting rate</span></p>
+            <p class="services__rate-note">[Adjust or remove — your call.]</p>
+          </div>
+          <a href="#contact" class="btn btn--solid">Start a project</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="section" id="contact">
+      <div class="wrap">
+        <div class="section__head">
+          <span class="section__index">05</span>
+          <h2 class="section__title">Contact</h2>
+        </div>
+
+        <div class="contact">
+          <div class="contact__lead reveal">
+            <p>
+              I communicate clearly, move fast, and own the work from start to finish.
+              Whether you're hiring, collaborating, or have a project in mind — get in
+              touch.
+            </p>
+            <ul class="contact__list">
+              <li>
+                <span class="contact__k">Email</span>
+                <a href="mailto:eliu4864@gmail.com">eliu4864@gmail.com</a>
+              </li>
+              <li>
+                <span class="contact__k">GitHub</span>
+                <a href="https://github.com/edison9733">github.com/edison9733</a>
+              </li>
+              <li>
+                <span class="contact__k">Location</span>
+                <span>[Your city / region]</span>
+              </li>
+              <li>
+                <span class="contact__k">Links</span>
+                <span>[LinkedIn / Fiverr / X — add as you like]</span>
+              </li>
+            </ul>
+          </div>
+
+          <form class="contact__form reveal" id="contactForm" novalidate>
+            <div class="field-row">
+              <div class="field">
+                <label for="cf-name">Name</label>
+                <input id="cf-name" name="name" type="text" autocomplete="name" required />
+              </div>
+              <div class="field">
+                <label for="cf-email">Email</label>
+                <input id="cf-email" name="email" type="email" autocomplete="email" required />
+              </div>
+            </div>
+            <div class="field">
+              <label for="cf-subject">Subject</label>
+              <input id="cf-subject" name="subject" type="text" />
+            </div>
+            <div class="field">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn--solid btn--full" id="cfSubmit">Send message</button>
+            <p class="contact__form-note" id="cfNote" hidden></p>
+            <p class="contact__form-hint">
+              [Note: this form needs a backend or a service like Formspree to actually
+              send. Wired to a mailto fallback for now — see scripts.js.]
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div class="footer__brand">
+        <span class="nav__mark">EL</span>
+        <span>Edison Liu</span>
+      </div>
+      <div class="footer__meta">
+        <span class="footer__status">
+          <span class="footer__dot"></span> Available for work
+        </span>
+        <span>© <span id="year"></span> Edison Liu</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
