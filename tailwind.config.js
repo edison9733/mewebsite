@@ -7,23 +7,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#FF6B35',
-        'primary-dark': '#E05A2B',
-        'primary-light': '#FF9966',
-        accent: '#FFB347',
-        'accent-dark': '#E09A30',
-        background: '#F9F9F9',
-        surface: '#FFFFFF',
-        ink: '#1A1A1A',
-        muted: '#6A6A6A',
-        divider: '#E0E0E0',
-        deep: '#0F1419',
+        // edison9733 — AI automation studio palette
+        ink: '#0E0F11',          // near-black text
+        paper: '#FAFAF7',        // warm off-white page
+        background: '#FAFAF7',   // alias (legacy refs)
+        surface: '#FFFFFF',      // cards
+        muted: '#6B6F76',        // secondary text
+        line: '#E7E5DF',         // borders / dividers
+        divider: '#E7E5DF',      // alias
+        dark: '#0E0F11',         // dark sections
+        'dark-soft': '#16181C',  // dark section cards
+        deep: '#0E0F11',         // alias
+        accent: '#B6F03C',       // lime signal
+        'accent-dark': '#9BD92A',
+        'accent-ink': '#16210A', // text on accent
+        primary: '#B6F03C',      // alias
       },
       fontFamily: {
         display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-        serif: ['"Cormorant Garamond"', 'serif'],
         body: ['"Inter"', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       borderRadius: {
         '2.5xl': '1.25rem',
@@ -33,20 +36,19 @@ export default {
         '7xl': '4rem',
       },
       animation: {
-        'pulse-slow': 'pulse 3s ease-in-out infinite',
-        'blink': 'blink 1s step-end infinite',
         'float': 'float 6s ease-in-out infinite',
+        'marquee': 'marquee 32s linear infinite',
       },
       keyframes: {
-        blink: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0' },
-        },
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-8px)' },
-        }
-      }
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
     },
   },
   plugins: [],
