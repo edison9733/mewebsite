@@ -124,10 +124,10 @@ function Hero() {
           <span className="w-2 h-2 rounded-full bg-accent pulse-dot inline-block" /> AI Automation Studio · Available for work
         </p>
         <h1 className="reveal font-display font-extrabold text-ink mt-6 leading-[0.98] tracking-tight text-balance text-[2.6rem] sm:text-6xl md:text-7xl max-w-5xl">
-          I build AI automation that does the work
-          <span className="relative whitespace-nowrap"> </span>
-          — <span className="relative">so you don't have to
-            <span className="absolute left-0 -bottom-1 h-2 w-full bg-accent/70 -z-0" />
+          I build AI automation that does the work —{' '}
+          <span className="relative inline-block">
+            <span className="absolute inset-x-0 bottom-1 h-3 sm:h-4 bg-accent/60" aria-hidden="true" />
+            <span className="relative">so you don't have to</span>
           </span>.
         </h1>
         <p className="reveal text-muted text-lg sm:text-xl mt-7 max-w-2xl leading-relaxed">
@@ -160,7 +160,7 @@ function TechStrip() {
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
         <p className="eyebrow mb-5">Working across the modern AI stack</p>
       </div>
-      <div className="marquee-mask">
+      <div className="marquee-mask" aria-hidden="true">
         <div className="flex gap-10 w-max animate-marquee whitespace-nowrap">
           {row.map((t, i) => (
             <span key={i} className="font-display font-semibold text-xl text-ink/35">{t}</span>
