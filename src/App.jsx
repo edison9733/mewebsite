@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Demos } from './demos'
 
 /* ============================================================
    edison9733 — solo AI automation studio
@@ -67,7 +68,7 @@ const APPROACH = [
 const TECH = ['OpenAI', 'Anthropic', 'LangChain', 'LlamaIndex', 'MCP', 'RAG', 'FastAPI', 'Supabase', 'Vercel', 'Python', 'TypeScript', 'Selenium']
 
 /* ---------------- Navbar ---------------- */
-const NAV_LINKS = [['Services', '#services'], ['Work', '#work'], ['Approach', '#approach'], ['About', '#about']]
+const NAV_LINKS = [['Services', '#services'], ['Work', '#work'], ['Approach', '#approach'], ['About', '#about'], ['Demos', '#demos']]
 
 function Wordmark({ dark = false }) {
   return (
@@ -376,19 +377,32 @@ function Field({ label, type = 'text', value, onChange, textarea }) {
 }
 
 function Contact() {
-  const [f, setF] = useState({ name: '', email: '', message: '' })
+  const [f, setF] = useState({ name: '', email: '', message: '', company: '' })
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
-  const submit = (e) => {
+
+  const submit = async (e) => {
     e.preventDefault()
-    const subject = encodeURIComponent(`Project enquiry from ${f.name || 'website'}`)
-    const body = encodeURIComponent(`${f.message}\n\n— ${f.name}\n${f.email}`)
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`
+    setStatus('sending')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: f.name, email: f.email, message: f.message, company: f.company }),
+      })
+      const data = await res.json()
+      if (data.ok) setStatus('sent')
+      else setStatus('error')
+    } catch {
+      setStatus('error')
+    }
   }
+
   return (
     <section id="contact" className="py-24 sm:py-32 px-6 sm:px-10 lg:px-16">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-start">
         <div>
-          <Head index="05" kicker="Contact" title="Have a process worth automating?" sub="Tell me the task you keep doing by hand. I'll tell you honestly whether AI can take it off your plate — and how I'd build it." />
+          <Head index="06" kicker="Contact" title="Have a process worth automating?" sub="Tell me the task you keep doing by hand. I'll tell you honestly whether AI can take it off your plate — and how I'd build it." />
           <ul className="reveal mt-8 space-y-px border border-line rounded-2xl overflow-hidden bg-line">
             <li className="bg-surface px-5 py-4 flex items-center gap-3">
               <Ico.mail className="w-5 h-5 text-muted" />
@@ -400,15 +414,53 @@ function Contact() {
             </li>
           </ul>
         </div>
-        <form onSubmit={submit} className="reveal card p-7 sm:p-8 space-y-5">
-          <div className="grid sm:grid-cols-2 gap-5">
-            <Field label="Name" value={f.name} onChange={set('name')} />
-            <Field label="Email" type="email" value={f.email} onChange={set('email')} />
+
+        {status === 'sent' ? (
+          <div className="reveal card p-7 sm:p-8 flex flex-col items-center text-center gap-5">
+            <div className="w-14 h-14 rounded-full bg-accent/15 text-accent-ink flex items-center justify-center">
+              <Ico.check className="w-7 h-7" />
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-xl text-ink">Message sent!</h3>
+              <p className="text-muted text-[15px] mt-2">I'll get back to you as soon as I can.</p>
+            </div>
+            <button
+              onClick={() => { setStatus('idle'); setF({ name: '', email: '', message: '', company: '' }) }}
+              className="btn btn-ghost btn-sm"
+            >
+              Send another
+            </button>
           </div>
-          <Field label="What do you want to automate?" textarea value={f.message} onChange={set('message')} />
-          <button type="submit" className="btn btn-ink w-full">Send message <Ico.arrow className="w-4 h-4" /></button>
-          <p className="text-xs text-muted text-center">Opens your email app, pre-filled. No backend, no tracking.</p>
-        </form>
+        ) : (
+          <form onSubmit={submit} className="reveal card p-7 sm:p-8 space-y-5">
+            {/* honeypot — hidden from real users, trips up bots */}
+            <input
+              type="text"
+              name="company"
+              tabIndex="-1"
+              autoComplete="off"
+              value={f.company}
+              onChange={set('company')}
+              aria-hidden="true"
+              style={{ position: 'absolute', opacity: 0, height: 0, width: 0, overflow: 'hidden', pointerEvents: 'none' }}
+            />
+            <div className="grid sm:grid-cols-2 gap-5">
+              <Field label="Name" value={f.name} onChange={set('name')} />
+              <Field label="Email" type="email" value={f.email} onChange={set('email')} />
+            </div>
+            <Field label="What do you want to automate?" textarea value={f.message} onChange={set('message')} />
+            {status === 'error' && (
+              <p className="text-red-600 text-sm">
+                Something went wrong.{' '}
+                <a href={`mailto:${EMAIL}`} className="underline hover:text-red-800">Email me directly</a> instead.
+              </p>
+            )}
+            <button type="submit" disabled={status === 'sending'} className="btn btn-ink w-full">
+              {status === 'sending' ? 'Sending…' : <><span>Send message</span><Ico.arrow className="w-4 h-4" /></>}
+            </button>
+            <p className="text-xs text-muted text-center">Goes straight to my private inbox. No third-party form service.</p>
+          </form>
+        )}
       </div>
     </section>
   )
@@ -477,6 +529,7 @@ export default function App() {
         <Work />
         <Approach />
         <About />
+        <Demos Head={Head} />
         <Contact />
       </main>
       <Footer />
