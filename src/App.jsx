@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Demos } from './demos'
+import profilePic from './assets/profile.jpg'
 
 /* ============================================================
    edison9733 — solo AI automation studio
@@ -305,6 +306,11 @@ function About() {
     <section id="about" className="py-24 sm:py-32 px-6 sm:px-10 lg:px-16 bg-surface border-y border-line">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-[1.4fr_1fr] gap-14 items-start">
         <div>
+          <img
+            src={profilePic}
+            alt="Edison Liu"
+            className="reveal w-24 h-24 rounded-full object-cover mb-6 border-2 border-line shadow-sm"
+          />
           <Head index="04" kicker="About" title="One engineer, built from the hardware up" />
           <div className="reveal text-muted text-lg leading-relaxed mt-6 space-y-5 max-w-2xl">
             <p>
