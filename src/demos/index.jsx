@@ -1,7 +1,9 @@
 import ReceiptParser, { meta as receiptMeta } from './receiptParser'
+import PulseFit, { meta as pulseFitMeta } from './pulseFit'
 
 // To add a demo: create one file in src/demos and add it to the DEMOS array.
 export const DEMOS = [
+  { ...pulseFitMeta, Component: PulseFit },
   { ...receiptMeta, Component: ReceiptParser },
 ]
 
