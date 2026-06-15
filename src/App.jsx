@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Demos } from './demos'
 import profilePic from './assets/profile.jpg'
 
@@ -14,7 +15,7 @@ const BOT_LINK = 'https://t.me/lhdn_receipt_tracker_bot'
 const BOT_REPO = 'https://github.com/edison9733/telegram_receipt_bot'
 
 /* ---------------- Inline icons (currentColor) ---------------- */
-const Ico = {
+export const Ico = {
   arrow: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M5 12h14M13 6l6 6-6 6"/></svg>),
   arrowUR: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M7 17 17 7M8 7h9v9"/></svg>),
   github: (p) => (<svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.4-1.27.73-1.56-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.28 5.69.41.36.78 1.07.78 2.16v3.2c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>),
@@ -31,7 +32,7 @@ const Ico = {
 }
 
 /* ---------------- Scroll reveal ---------------- */
-function useReveal() {
+export function useReveal() {
   useEffect(() => {
     document.documentElement.classList.add('reveal-ready')
     const els = document.querySelectorAll('.reveal')
@@ -73,16 +74,18 @@ const NAV_LINKS = [['Services', '#services'], ['Work', '#work'], ['Approach', '#
 
 function Wordmark({ dark = false }) {
   return (
-    <a href="#home" className="inline-flex items-center gap-2 group">
+    <a href="/" className="inline-flex items-center gap-2 group">
       <span className={`font-display font-extrabold text-[19px] tracking-tight ${dark ? 'text-white' : 'text-ink'}`}>edison9733</span>
       <span className="w-2 h-2 rounded-full bg-accent group-hover:scale-125 transition-transform" />
     </a>
   )
 }
 
-function Navbar() {
+export function Navbar() {
   const [open, setOpen] = useState(false)
   const [solid, setSolid] = useState(false)
+  const { pathname } = useLocation()
+  const base = pathname === '/' ? '' : '/'
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 24)
     onScroll(); window.addEventListener('scroll', onScroll)
@@ -97,9 +100,9 @@ function Navbar() {
         </div>
         <nav className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map(([label, href]) => (
-            <a key={href} href={href} className="text-[15px] text-muted hover:text-ink transition-colors">{label}</a>
+            <a key={href} href={base + href} className="text-[15px] text-muted hover:text-ink transition-colors">{label}</a>
           ))}
-          <a href="#contact" className="btn btn-ink btn-sm">Start a project</a>
+          <a href={base + "#contact"} className="btn btn-ink btn-sm">Start a project</a>
         </nav>
         <button className="md:hidden text-ink p-2 -mr-2" aria-label="Menu" onClick={() => setOpen(v => !v)}>
           {open ? <Ico.close className="w-6 h-6" /> : <Ico.menu className="w-6 h-6" />}
@@ -108,9 +111,9 @@ function Navbar() {
       {open && (
         <div className="md:hidden bg-paper border-t border-line px-6 py-5 flex flex-col gap-4">
           {NAV_LINKS.map(([label, href]) => (
-            <a key={href} href={href} onClick={() => setOpen(false)} className="text-base text-ink">{label}</a>
+            <a key={href} href={base + href} onClick={() => setOpen(false)} className="text-base text-ink">{label}</a>
           ))}
-          <a href="#contact" onClick={() => setOpen(false)} className="btn btn-ink mt-1">Start a project</a>
+          <a href={base + "#contact"} onClick={() => setOpen(false)} className="btn btn-ink mt-1">Start a project</a>
         </div>
       )}
     </header>
@@ -174,7 +177,7 @@ function TechStrip() {
 }
 
 /* ---------------- Section header ---------------- */
-function Head({ index, kicker, title, sub, dark = false }) {
+export function Head({ index, kicker, title, sub, dark = false }) {
   return (
     <div className="max-w-3xl">
       <p className={`eyebrow reveal ${dark ? 'eyebrow-dark' : ''}`}><span className="opacity-60">{index}</span> {kicker}</p>
@@ -473,7 +476,9 @@ function Contact() {
 }
 
 /* ---------------- Footer ---------------- */
-function Footer() {
+export function Footer() {
+  const { pathname } = useLocation()
+  const base = pathname === '/' ? '' : '/'
   return (
     <footer className="bg-dark text-white pt-20 pb-10 px-6 sm:px-10 lg:px-16 rounded-t-[2.5rem]">
       <div className="max-w-7xl mx-auto">
@@ -482,7 +487,7 @@ function Footer() {
             Let's build<br />something that runs<span className="text-accent">.</span>
           </h2>
           <div className="lg:text-right">
-            <a href="#contact" className="btn btn-accent">Start a project <Ico.arrow className="w-4 h-4" /></a>
+            <a href={base + "#contact"} className="btn btn-accent">Start a project <Ico.arrow className="w-4 h-4" /></a>
           </div>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mt-12">
@@ -494,7 +499,7 @@ function Footer() {
             <h3 className="eyebrow eyebrow-dark !text-[11px]">Studio</h3>
             <ul className="mt-4 space-y-2">
               {NAV_LINKS.map(([l, h]) => (
-                <li key={h}><a href={h} className="text-white/60 hover:text-accent text-sm transition-colors">{l}</a></li>
+                <li key={h}><a href={base + h} className="text-white/60 hover:text-accent text-sm transition-colors">{l}</a></li>
               ))}
             </ul>
           </div>

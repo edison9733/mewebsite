@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export const meta = {
   id: 'pulsefit',
   title: 'PulseFit — AI gym booking assistant',
@@ -7,14 +9,12 @@ export const meta = {
 
 export default function PulseFit() {
   return (
-    <a
-      href="/pulsefit/"
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      to="/demos/pulsefit"
       className="inline-flex items-center gap-2 px-5 py-3 rounded-lg font-semibold text-[#0E0F11] text-sm transition-opacity hover:opacity-80"
       style={{ backgroundColor: '#B6F03C' }}
     >
       Open live demo →
-    </a>
+    </Link>
   )
 }
