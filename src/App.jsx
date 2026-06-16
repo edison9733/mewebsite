@@ -4,21 +4,17 @@ import { Demos } from './demos'
 import profilePic from './assets/profile.jpg'
 
 /* ============================================================
-   edison9733 — solo AI automation studio
-   Tryolabs-inspired structure & tone, original code.
+   edison9733 — personal site
    Stack: React + Vite + Tailwind. No icon/animation deps.
    ============================================================ */
 
 const EMAIL = 'ediedi9733@gmail.com'
-const GITHUB = 'https://github.com/edison9733'
 const BOT_LINK = 'https://t.me/lhdn_receipt_tracker_bot'
-const BOT_REPO = 'https://github.com/edison9733/telegram_receipt_bot'
 
 /* ---------------- Inline icons (currentColor) ---------------- */
 export const Ico = {
   arrow: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M5 12h14M13 6l6 6-6 6"/></svg>),
   arrowUR: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M7 17 17 7M8 7h9v9"/></svg>),
-  github: (p) => (<svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.4-1.27.73-1.56-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.28 5.69.41.36.78 1.07.78 2.16v3.2c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>),
   mail: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>),
   menu: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" {...p}><path d="M3 6h18M3 12h18M3 18h18"/></svg>),
   close: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" {...p}><path d="M6 6l12 12M18 6 6 18"/></svg>),
@@ -46,18 +42,16 @@ export function useReveal() {
 
 /* ---------------- Data ---------------- */
 const SERVICES = [
-  { icon: Ico.bot, title: 'AI Agents & Assistants', text: 'Tool-calling agents that take real actions — not just chat. Function calling, multi-step reasoning, and MCP tools wired into your systems.', tags: ['Function calling', 'MCP', 'OpenAI'] },
-  { icon: Ico.flow, title: 'Web & Data Automation', text: 'Scrape, log in, extract, and pipe results straight into an LLM. The manual web work you keep redoing — handed to a script.', tags: ['Selenium', 'Requests', 'Parsel'] },
-  { icon: Ico.brain, title: 'RAG & Knowledge Systems', text: 'Chat over your own docs and data with grounded, cited answers. Embeddings, vector search, and retrieval that stays honest.', tags: ['Embeddings', 'Vector DB', 'LlamaIndex'] },
-  { icon: Ico.plug, title: 'LLM Pipelines & Integrations', text: 'Wire models into your tools and APIs as serverless endpoints and webhooks — production-shaped, not notebook demos.', tags: ['FastAPI', 'Vercel', 'Webhooks'] },
-  { icon: Ico.eye, title: 'Computer-Vision Automation', text: 'Turn video and images into metrics: detect, track, and count automatically. From a manual tally to a live number.', tags: ['YOLO', 'Norfair', 'OpenCV'] },
-  { icon: Ico.shield, title: 'LLMOps & Guardrails', text: 'Make agents safe and observable — input/output validation, tracing, and evals so you can trust what ships.', tags: ['Guardrails', 'Langfuse', 'Evals'] },
+  { icon: Ico.bot, title: 'AI Agents & Assistants', text: 'Tool-calling agents that take real actions — not just chat. Function calling, multi-step reasoning, and MCP tools wired into your systems.', tags: ['Function calling', 'MCP', 'Telegram', 'Webhooks'] },
+  { icon: Ico.flow, title: 'Web & Data Automation', text: 'Automate the manual work that eats hours every week — scrape, extract, and pipe results straight into your workflow. Built to keep running, not just run once.', tags: ['Python', 'Selenium', 'Serverless'] },
+  { icon: Ico.plug, title: 'LLM Pipelines & Integrations', text: 'Wire vision and language models into your tools as serverless endpoints and webhooks — production-shaped, not notebook demos.', tags: ['FastAPI', 'Vercel', 'Groq', 'Supabase'] },
 ]
 
-const WORK = [
-  { tag: 'Build in progress', title: 'Scrape → Summarize automation', text: 'A session-aware scraper that logs in, pulls data from JS-heavy pages, and pipes it to an LLM for clean structured output. Built on the Requests + Selenium pattern.', stack: ['Python', 'Selenium', 'LLM'], refLabel: 'Reference: tryolabs/requestium', refUrl: 'https://github.com/tryolabs/requestium' },
-  { tag: 'Planned', title: 'Multi-tool agent + MCP', text: 'A FastAPI agent orchestrating MCP servers — one doing RAG over private docs, one calling a public API — with model-agnostic routing and request tracing.', stack: ['FastAPI', 'LlamaIndex', 'MCP'], refLabel: 'Reference: tryolabs/unicef-agent', refUrl: 'https://github.com/tryolabs/unicef-agent' },
-  { tag: 'Planned', title: 'Topic guardrail validator', text: 'A reusable validator that keeps an LLM on-topic with a zero-shot classifier and an LLM fallback — publishable to the Guardrails Hub.', stack: ['Python', 'Guardrails', 'Transformers'], refLabel: 'Reference: tryolabs/restricttotopic', refUrl: 'https://github.com/tryolabs/restricttotopic' },
+const SKILL_GROUPS = [
+  { label: 'Languages', items: ['Python', 'TypeScript', 'JavaScript', 'C / C++', 'SQL'] },
+  { label: 'AI & LLMs', items: ['LLM agents & function calling', 'RAG & embeddings', 'Vision models (Llama 4 Vision)', 'Prompt & eval design', 'MCP tooling'] },
+  { label: 'Backend & Infra', items: ['Node.js', 'FastAPI', 'Serverless (Vercel)', 'Supabase / Postgres', 'REST & webhooks'] },
+  { label: 'Hardware & Systems', items: ['Digital logic (NAND-gate design)', 'Breadboard & embedded prototyping', 'Electronics fundamentals', 'Control logic'] },
 ]
 
 const APPROACH = [
@@ -70,7 +64,7 @@ const APPROACH = [
 const TECH = ['OpenAI', 'Anthropic', 'LangChain', 'LlamaIndex', 'MCP', 'RAG', 'FastAPI', 'Supabase', 'Vercel', 'Python', 'TypeScript', 'Selenium']
 
 /* ---------------- Navbar ---------------- */
-const NAV_LINKS = [['Services', '#services'], ['Work', '#work'], ['Approach', '#approach'], ['About', '#about'], ['Demos', '#demos']]
+const NAV_LINKS = [['What I build', '#services'], ['Work', '#work'], ['Approach', '#approach'], ['About', '#about'], ['Demos', '#demos']]
 
 function Wordmark({ dark = false }) {
   return (
@@ -96,13 +90,13 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Wordmark />
-          <span className="hidden md:inline eyebrow !text-[11px] border-l border-line pl-3 ml-1">AI Automation Studio</span>
+          <span className="hidden md:inline eyebrow !text-[11px] border-l border-line pl-3 ml-1">AI & Automation Engineer</span>
         </div>
         <nav className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map(([label, href]) => (
             <a key={href} href={base + href} className="text-[15px] text-muted hover:text-ink transition-colors">{label}</a>
           ))}
-          <a href={base + "#contact"} className="btn btn-ink btn-sm">Start a project</a>
+          <a href={base + "#contact"} className="btn btn-ink btn-sm">Get in touch</a>
         </nav>
         <button className="md:hidden text-ink p-2 -mr-2" aria-label="Menu" onClick={() => setOpen(v => !v)}>
           {open ? <Ico.close className="w-6 h-6" /> : <Ico.menu className="w-6 h-6" />}
@@ -113,7 +107,7 @@ export function Navbar() {
           {NAV_LINKS.map(([label, href]) => (
             <a key={href} href={base + href} onClick={() => setOpen(false)} className="text-base text-ink">{label}</a>
           ))}
-          <a href={base + "#contact"} onClick={() => setOpen(false)} className="btn btn-ink mt-1">Start a project</a>
+          <a href={base + "#contact"} onClick={() => setOpen(false)} className="btn btn-ink mt-1">Get in touch</a>
         </div>
       )}
     </header>
@@ -126,26 +120,26 @@ function Hero() {
     <section id="home" className="relative pt-36 sm:pt-44 pb-20 sm:pb-28 px-6 sm:px-10 lg:px-16 grid-faint">
       <div className="max-w-7xl mx-auto">
         <p className="eyebrow reveal">
-          <span className="w-2 h-2 rounded-full bg-accent pulse-dot inline-block" /> AI Automation Studio · Available for work
+          <span className="w-2 h-2 rounded-full bg-accent pulse-dot inline-block" /> ZJU-UIUC · Electronic & Computer Engineering
         </p>
         <h1 className="reveal font-display font-extrabold text-ink mt-6 leading-[0.98] tracking-tight text-balance text-[2.6rem] sm:text-6xl md:text-7xl max-w-5xl">
-          I build AI automation that does the work —{' '}
+          I build AI automation that ships to production —{' '}
           <span className="relative inline-block">
             <span className="absolute inset-x-0 bottom-1 h-3 sm:h-4 bg-accent/60" aria-hidden="true" />
-            <span className="relative">so you don't have to</span>
+            <span className="relative">and keeps running</span>
           </span>.
         </h1>
         <p className="reveal text-muted text-lg sm:text-xl mt-7 max-w-2xl leading-relaxed">
-          <span className="font-semibold text-ink">edison9733</span> is a solo AI-automation studio run by Edison Liu. I design and ship
-          LLM agents, web &amp; data automations, and RAG systems that cut manual work and move real
-          metrics — built end to end, from the hardware up.
+          I'm <span className="font-semibold text-ink">Edison Liu</span> — an electronic &amp; computer engineering student
+          who ships AI systems end to end. I build LLM agents, vision pipelines, and web automations that run on serverless
+          infrastructure — and because I came up through hardware, I understand the stack all the way down to the logic gates.
         </p>
         <div className="reveal flex flex-wrap items-center gap-3 mt-9">
           <a href="#work" className="btn btn-ink">See the work <Ico.arrow className="w-4 h-4" /></a>
-          <a href="#contact" className="btn btn-ghost">Start a project</a>
+          <a href="#contact" className="btn btn-ghost">Get in touch</a>
         </div>
         <dl className="reveal grid grid-cols-2 sm:grid-cols-3 gap-px mt-14 border border-line rounded-2xl overflow-hidden bg-line max-w-3xl">
-          {[['Focus', 'AI agents · Automation · RAG'], ['Stack', 'Python · TS · React · MCP'], ['Status', 'Open to projects']].map(([k, v]) => (
+          {[['Focus', 'AI agents · Automation · RAG'], ['Stack', 'Python · TS · React · MCP'], ['Status', 'Open to internships & roles']].map(([k, v]) => (
             <div key={k} className="bg-surface px-5 py-4">
               <dt className="font-mono text-[11px] uppercase tracking-wide text-muted">{k}</dt>
               <dd className="text-ink text-sm font-medium mt-1">{v}</dd>
@@ -192,7 +186,7 @@ function Services() {
   return (
     <section id="services" className="py-24 sm:py-32 px-6 sm:px-10 lg:px-16">
       <div className="max-w-7xl mx-auto">
-        <Head index="01" kicker="Services" title="What I build" sub="Six ways I turn repetitive, manual work into systems that run themselves." />
+        <Head index="01" kicker="Capabilities" title="What I build" sub="Three areas where I have working systems in production — not planned, not prototyped, live." />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-14">
           {SERVICES.map((s) => {
             const Icon = s.icon
@@ -220,7 +214,7 @@ function Work() {
   return (
     <section id="work" className="bg-dark text-white py-24 sm:py-32 px-6 sm:px-10 lg:px-16 rounded-t-[2.5rem] grid-faint-dark">
       <div className="max-w-7xl mx-auto">
-        <Head index="02" kicker="Selected work" title="Things I've shipped — and what's next" sub="One live product, plus the automations I'm building from proven open-source patterns." dark />
+        <Head index="02" kicker="Selected work" title="Things I've shipped" sub="One live product, built and deployed end to end — plus the stack I build on." dark />
 
         {/* Featured — the live bot */}
         <article className="reveal card-dark mt-14 p-7 sm:p-10 grid lg:grid-cols-5 gap-8 items-center">
@@ -233,23 +227,33 @@ function Work() {
             </div>
             <h3 className="font-display font-extrabold text-3xl sm:text-4xl leading-tight">LHDN Receipt Tracker</h3>
             <p className="text-white/65 mt-4 leading-relaxed max-w-xl">
-              A zero-setup Telegram bot that turns a photo of any receipt into filed, categorised tax data.
-              Snap a receipt and an AI vision model reads the shop, date, and amount, then files it as a Malaysian
-              LHDN personal relief or a Form B business expense — tracking totals so filing is effortless. Private
-              per user, serverless, with a free-tier scan cap to keep costs in check.
+              A zero-setup Telegram bot that turns a receipt photo into a filed, categorised tax record.
+              Groq's Llama 4 Scout vision model extracts shop, date, amount, and currency in a single inference
+              call; a structured prompt maps the result to one of 22 Malaysian LHDN personal relief types or a
+              Form B business expense. Each user gets a private, row-isolated Supabase store — no shared state.
+              Built and deployed end to end in a single day.
             </p>
-            <div className="flex flex-wrap gap-2 mt-6">
+            {/* Architecture pipeline */}
+            <div className="mt-5 border border-white/10 rounded-xl p-4 bg-white/[0.03]">
+              <p className="text-white/40 text-[11px] font-mono uppercase tracking-wide mb-2">Pipeline</p>
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px]">
+                {[['📷 Photo', false], ['→', true], ['Vercel webhook', false], ['→', true], ['Groq Vision OCR', false], ['→', true], ['LHDN mapper', false], ['→', true], ['Supabase', false]].map(([s, isArrow], i) => (
+                  <span key={i} className={isArrow ? 'text-accent/50' : 'text-white/75 font-medium'}>{s}</span>
+                ))}
+              </div>
+              <p className="text-white/40 text-[12px] mt-2.5 leading-relaxed">
+                Serverless + Groq free tier keeps cost near-zero. Hardest problem: reliable extraction across mixed-language receipts — faded ink, varied date formats, Malay/Chinese shop names — solved with a structured prompt and graceful fallback categories.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 mt-5">
               {['Telegram Bot API', 'Node.js', 'Vercel', 'Supabase', 'Groq Llama 4 Vision'].map((t) => <span key={t} className="tag tag-dark">{t}</span>)}
             </div>
             <div className="flex flex-wrap items-center gap-5 mt-7">
               <a href={BOT_LINK} target="_blank" rel="noopener noreferrer" className="btn btn-accent btn-sm">Try the bot <Ico.arrowUR className="w-4 h-4" /></a>
-              <a href={BOT_REPO} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-accent transition-colors">
-                <Ico.github className="w-4 h-4" /> Source
-              </a>
             </div>
           </div>
           <div className="lg:col-span-2 grid grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden">
-            {[['22', 'LHDN relief types'], ['0', 'Setup steps'], ['1', 'Photo to filed']].map(([n, l]) => (
+            {[['1 day', 'Idea to live'], ['22', 'LHDN relief types'], ['1 photo', 'To a filed record']].map(([n, l]) => (
               <div key={l} className="bg-dark-soft px-3 py-6 text-center">
                 <div className="font-display font-extrabold text-2xl sm:text-3xl text-accent">{n}</div>
                 <div className="text-white/55 text-[11px] mt-1 leading-tight">{l}</div>
@@ -258,26 +262,25 @@ function Work() {
           </div>
         </article>
 
-        {/* Build pipeline */}
-        <div className="grid md:grid-cols-3 gap-5 mt-5">
-          {WORK.map((w) => (
-            <article key={w.title} className="reveal card-dark p-7 flex flex-col">
-              <span className="tag tag-accent self-start">{w.tag}</span>
-              <h3 className="font-display font-bold text-xl mt-4">{w.title}</h3>
-              <p className="text-white/60 text-[15px] mt-3 leading-relaxed flex-grow">{w.text}</p>
-              <div className="flex flex-wrap gap-2 mt-5">
-                {w.stack.map((t) => <span key={t} className="tag tag-dark">{t}</span>)}
+        {/* Skills / tech stack showcase */}
+        <div className="reveal mt-12">
+          <p className="eyebrow eyebrow-dark">The toolkit behind it</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
+            {SKILL_GROUPS.map((g) => (
+              <div key={g.label} className="card-dark p-6">
+                <h3 className="font-display font-bold text-base text-white">{g.label}</h3>
+                <ul className="mt-4 space-y-2">
+                  {g.items.map((it) => (
+                    <li key={it} className="flex items-start gap-2 text-white/65 text-[14px] leading-snug">
+                      <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                      {it}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <a href={w.refUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[13px] text-white/55 hover:text-accent transition-colors mt-5">
-                <Ico.github className="w-4 h-4" /> {w.refLabel}
-              </a>
-            </article>
-          ))}
+            ))}
+          </div>
         </div>
-
-        <p className="reveal text-white/45 text-sm mt-10">
-          More on GitHub — <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">github.com/edison9733</a>
-        </p>
       </div>
     </section>
   )
@@ -322,19 +325,17 @@ function About() {
               Illinois Urbana-Champaign.
             </p>
             <p>
-              My background is unusual for someone shipping AI: I came up through hardware. I've built a motorised car
-              from a bare breadboard, designed a working vending machine out of nothing but NAND gates, and led a summer
-              research team on ultracold atomic physics. So when I build software, I understand what's happening all the
-              way down.
+              My background is unusual for someone shipping AI: I came up through hardware. I understand the systems I
+              build all the way down to the logic gates — and that shapes how I reason about everything above them.
             </p>
             <p>
-              edison9733 runs AI-native. My build environment is Claude Code with MCP connectors, version-controlled to
-              GitHub, with human approval gates before anything touches a live system — letting me design, generate, and
-              review code end to end while owning the requirements, integration, and verification myself.
+              I work AI-native: I architect each system, drive the build with Claude Code and MCP tooling, and keep human
+              approval gates before anything reaches production. The tooling accelerates how fast I ship — the requirements,
+              integration, and verification are mine to own.
             </p>
           </div>
           <div className="reveal inline-flex items-center gap-2 mt-8 text-sm font-medium text-ink">
-            <span className="w-2.5 h-2.5 rounded-full bg-accent pulse-dot" /> Available for freelance &amp; project work
+            <span className="w-2.5 h-2.5 rounded-full bg-accent pulse-dot" /> Open to internships &amp; full-time roles
           </div>
         </div>
         <div className="space-y-4">
@@ -365,6 +366,14 @@ function About() {
                 <p className="text-sm text-muted">Stanford Online / Coursera (Andrew Ng)</p>
               </div>
             </div>
+          </div>
+          <div className="reveal card p-6">
+            <h3 className="eyebrow !text-[11px]">Selected builds</h3>
+            <ul className="mt-4 space-y-3 text-sm text-muted leading-relaxed">
+              <li>Built a motorised car from a bare breadboard — designed the circuit and control logic from first principles.</li>
+              <li>Designed a working vending machine from only NAND gates, implementing coin handling and product selection as pure logic.</li>
+              <li>Led a summer research team in ultracold atomic physics, coordinating the group's experimental work.</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -411,15 +420,11 @@ function Contact() {
     <section id="contact" className="py-24 sm:py-32 px-6 sm:px-10 lg:px-16">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-start">
         <div>
-          <Head index="06" kicker="Contact" title="Have a process worth automating?" sub="Tell me the task you keep doing by hand. I'll tell you honestly whether AI can take it off your plate — and how I'd build it." />
+          <Head index="06" kicker="Contact" title="Want to build something together?" sub="Whether it's a role, a project, or a technical question — reach out. I respond to everything." />
           <ul className="reveal mt-8 space-y-px border border-line rounded-2xl overflow-hidden bg-line">
             <li className="bg-surface px-5 py-4 flex items-center gap-3">
               <Ico.mail className="w-5 h-5 text-muted" />
               <a href={`mailto:${EMAIL}`} className="text-ink hover:text-accent-ink transition-colors">{EMAIL}</a>
-            </li>
-            <li className="bg-surface px-5 py-4 flex items-center gap-3">
-              <Ico.github className="w-5 h-5 text-muted" />
-              <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="text-ink hover:text-accent-ink transition-colors">github.com/edison9733</a>
             </li>
           </ul>
         </div>
@@ -457,7 +462,7 @@ function Contact() {
               <Field label="Name" value={f.name} onChange={set('name')} />
               <Field label="Email" type="email" value={f.email} onChange={set('email')} />
             </div>
-            <Field label="What do you want to automate?" textarea value={f.message} onChange={set('message')} />
+            <Field label="What's on your mind?" textarea value={f.message} onChange={set('message')} />
             {status === 'error' && (
               <p className="text-red-600 text-sm">
                 Something went wrong.{' '}
@@ -487,16 +492,16 @@ export function Footer() {
             Let's build<br />something that runs<span className="text-accent">.</span>
           </h2>
           <div className="lg:text-right">
-            <a href={base + "#contact"} className="btn btn-accent">Start a project <Ico.arrow className="w-4 h-4" /></a>
+            <a href={base + "#contact"} className="btn btn-accent">Get in touch <Ico.arrow className="w-4 h-4" /></a>
           </div>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mt-12">
           <div>
             <Wordmark dark />
-            <p className="text-white/45 text-sm mt-4 max-w-xs leading-relaxed">A solo AI-automation studio. Agents, automations, and RAG systems — designed, built, and shipped.</p>
+            <p className="text-white/45 text-sm mt-4 max-w-xs leading-relaxed">ECE student at ZJU-UIUC — shipping AI agents, pipelines, and automations end to end, from logic gates up.</p>
           </div>
           <div>
-            <h3 className="eyebrow eyebrow-dark !text-[11px]">Studio</h3>
+            <h3 className="eyebrow eyebrow-dark !text-[11px]">Navigate</h3>
             <ul className="mt-4 space-y-2">
               {NAV_LINKS.map(([l, h]) => (
                 <li key={h}><a href={base + h} className="text-white/60 hover:text-accent text-sm transition-colors">{l}</a></li>
@@ -507,19 +512,18 @@ export function Footer() {
             <h3 className="eyebrow eyebrow-dark !text-[11px]">Contact</h3>
             <ul className="mt-4 space-y-2">
               <li><a href={`mailto:${EMAIL}`} className="text-white/60 hover:text-accent text-sm transition-colors">{EMAIL}</a></li>
-              <li><a href={GITHUB} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-accent text-sm transition-colors">GitHub</a></li>
               <li><a href={BOT_LINK} target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-accent text-sm transition-colors">LHDN Receipt Bot</a></li>
             </ul>
           </div>
           <div>
             <h3 className="eyebrow eyebrow-dark !text-[11px]">Status</h3>
             <p className="inline-flex items-center gap-2 mt-4 text-white/70 text-sm">
-              <span className="w-2 h-2 rounded-full bg-accent pulse-dot" /> Available for work
+              <span className="w-2 h-2 rounded-full bg-accent pulse-dot" /> Open to roles
             </p>
           </div>
         </div>
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between gap-3 text-white/40 text-xs">
-          <span>© {new Date().getFullYear()} edison9733 · AI Automation Studio</span>
+          <span>© {new Date().getFullYear()} edison9733</span>
           <span>Built with React · Hosted on edison9733.xyz</span>
         </div>
       </div>
