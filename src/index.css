@@ -47,6 +47,9 @@
   .btn-outline-light { @apply bg-transparent text-white; border-color: rgba(255,255,255,0.22); }
   .btn-outline-light:hover { border-color: rgba(255,255,255,0.6); }
   .btn-sm { @apply px-4 py-2.5 text-[13.5px]; }
+  /* Subtle lime "neon" glow — draws the eye to a key call-to-action */
+  .btn-glow { box-shadow: 0 4px 18px -6px rgba(182,240,60,0.55); }
+  .btn-glow:hover { box-shadow: 0 6px 26px -4px rgba(182,240,60,0.8); }
   /* Subtle arrow nudge on hover — motion that points where the click goes */
   .btn svg { transition: transform 0.2s ease; }
   .btn:hover svg { transform: translateX(2px); }

@@ -94,7 +94,7 @@ export default function PulseFit() {
         <button onClick={send} disabled={sending} className="btn btn-ink btn-sm">
           {sending ? 'Sending…' : 'Send to assistant'}
         </button>
-        <Link to="/demos/pulsefit" className="text-sm text-muted hover:text-ink transition-colors">Open the full demo →</Link>
+        <Link to="/demos/pulsefit" className="btn btn-accent btn-sm btn-glow">Open the full demo →</Link>
       </div>
       {reply && (
         <div className={`rounded-xl border p-4 text-sm leading-relaxed ${reply.error ? 'border-red-200 bg-red-50 text-red-700' : 'border-line bg-surface text-ink'}`}>
