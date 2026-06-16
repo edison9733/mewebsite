@@ -34,7 +34,17 @@ export const Ico = {
 export function useReveal() {
   useEffect(() => {
     document.documentElement.classList.add('reveal-ready')
-    const els = document.querySelectorAll('.reveal')
+    const els = Array.from(document.querySelectorAll('.reveal'))
+    // Stagger: each .reveal gets a small delay based on its order among
+    // .reveal siblings sharing a parent (capped so it never drags). Single
+    // elements get 0ms; grids and the hero cascade in cleanly.
+    const seen = new Map()
+    els.forEach((el) => {
+      const parent = el.parentElement
+      const i = seen.get(parent) || 0
+      seen.set(parent, i + 1)
+      el.style.setProperty('--reveal-delay', `${Math.min(i, 6) * 70}ms`)
+    })
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target) } })
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' })

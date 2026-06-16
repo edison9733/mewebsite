@@ -4,4 +4,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: { port: parseInt(process.env.PORT) || 5173 },
+  // Don't ship source maps to production — keeps original source off the wire.
+  build: { sourcemap: false },
 })

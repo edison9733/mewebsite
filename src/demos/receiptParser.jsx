@@ -2,9 +2,9 @@ import { useState } from 'react'
 
 export const meta = {
   id: 'receipt-parser',
-  title: 'Receipt line parser',
-  blurb: 'Paste a messy receipt line. It pulls out merchant, amount and date — in your browser.',
-  tags: ['client-side', 'parsing'],
+  title: 'LHDN receipt parser',
+  blurb: "A browser-only taste of the LHDN bot's first step — paste a messy receipt line and watch it pull out merchant, amount, and date. The live bot does this from a photo with a vision model.",
+  tags: ['client-side', 'parsing', 'LHDN'],
 }
 
 function parseReceipt(line) {
@@ -30,6 +30,7 @@ export default function ReceiptParser() {
         type="text"
         value={line}
         onChange={e => setLine(e.target.value)}
+        aria-label="Receipt line to parse"
         className="w-full bg-paper border border-line rounded-xl px-4 py-3 text-ink font-mono text-sm focus:outline-none focus:border-ink transition-colors"
         placeholder="Paste a receipt line…"
       />

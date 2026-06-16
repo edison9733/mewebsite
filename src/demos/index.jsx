@@ -12,7 +12,7 @@ export function Demos({ Head }) {
     <section id="demos" className="py-24 sm:py-32 px-6 sm:px-10 lg:px-16 bg-surface border-y border-line">
       <div className="max-w-7xl mx-auto">
         {Head && (
-          <Head index="05" kicker="Try it" title="Live demos you can use right here" sub="Small working examples that run in your browser. No sign-up, no redirect." />
+          <Head index="06" kicker="Try it" title="Live demos you can use right here" sub="Two systems you can poke at right now — one calls a live AI workflow, one runs entirely in your browser. No sign-up, no redirect." />
         )}
         <div className="grid gap-8 mt-14">
           {DEMOS.map(({ id, title, blurb, tags, Component }) => (
