@@ -11,7 +11,7 @@ const CFG = {
   REGISTER_URL: 'https://script.google.com/macros/s/AKfycbxmXbKKJ9HSJ61yuRc4BkdDatHcOoD5HxeyE9MdBdPcEmE1MypWI4U0D36_4cJ2-1VntQ/exec',
   DEMO_EMAIL: 'ediedi9733@gmail.com',
   TELEGRAM_BOT_URL: 'https://t.me/PulseFit_Demo_bot',
-  SHEET_EMBED_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRJQavVhCmBDcSpdtNi400un6nBeb45li3Tu6SZP8tieRE-CW2yQz_iS8m76ohJuS4cjPigfUAasv-g/pubhtml?gid=331949744&single=true',
+  SHEET_EMBED_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRJQavVhCmBDcSpdtNi400un6nBeb45li3Tu6SZP8tieRE-CW2yQz_iS8m76ohJuS4cjPigfUAasv-g/pubhtml?gid=1055592511&single=true',
 }
 
 const REG_KEY = 'pulsefit_registered'
