@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Demos } from './demos'
-import profilePic from './assets/profile.jpg'
+// About photo — real headshot. (The alpaca lives on as the browser-tab favicon.)
+import profilePic from './assets/profile-edison.jpg'
 
 /* ============================================================
    edison9733 — personal site
@@ -25,6 +26,8 @@ export const Ico = {
   plug: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M9 2v6M15 2v6M7 8h10v3a5 5 0 0 1-10 0V8ZM12 16v6"/></svg>),
   eye: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>),
   shield: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg>),
+  workflow: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="5" cy="6" r="2.2"/><circle cx="5" cy="18" r="2.2"/><circle cx="19" cy="12" r="2.2"/><path d="M7.2 6h4.3a3 3 0 0 1 3 3v.6M7.2 18h4.3a3 3 0 0 0 3-3v-.6"/></svg>),
+  layers: (p) => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></svg>),
 }
 
 /* ---------------- Scroll reveal ---------------- */
@@ -43,28 +46,37 @@ export function useReveal() {
 /* ---------------- Data ---------------- */
 const SERVICES = [
   { icon: Ico.bot, title: 'AI Agents & Assistants', text: 'Tool-calling agents that take real actions — not just chat. Function calling, multi-step reasoning, and MCP tools wired into your systems.', tags: ['Function calling', 'MCP', 'Telegram', 'Webhooks'] },
-  { icon: Ico.flow, title: 'Web & Data Automation', text: 'Automate the manual work that eats hours every week — scrape, extract, and pipe results straight into your workflow. Built to keep running, not just run once.', tags: ['Python', 'Selenium', 'Serverless'] },
+  { icon: Ico.flow, title: 'Web Scraping & Data Automation', text: 'Log in, scrape JS-heavy pages, extract the fields that matter, and pipe results straight into your workflow. Built to keep running, not just run once.', tags: ['Python', 'Selenium', 'Parsing', 'Serverless'] },
+  { icon: Ico.brain, title: 'RAG & Knowledge Systems', text: 'Chat over your own documents with grounded, cited answers. Embeddings, vector search, and retrieval you can trace back to the source.', tags: ['Embeddings', 'Vector DB', 'LlamaIndex', 'RAG'] },
+  { icon: Ico.workflow, title: 'AI Workflow Automation', text: 'Chain models, APIs, and triggers into automations that fire on a schedule or an event — so the work happens with no one watching the dashboard.', tags: ['n8n', 'trigger.dev', 'Webhooks', 'Cron'] },
   { icon: Ico.plug, title: 'LLM Pipelines & Integrations', text: 'Wire vision and language models into your tools as serverless endpoints and webhooks — production-shaped, not notebook demos.', tags: ['FastAPI', 'Vercel', 'Groq', 'Supabase'] },
+  { icon: Ico.layers, title: 'End-to-End AI Systems', text: 'The whole stack as one system — ingestion, model, storage, and interface — taken from raw input to a deployed product you can actually use.', tags: ['Vision', 'Supabase', 'Vercel', 'APIs'] },
 ]
 
 const SKILL_GROUPS = [
   { label: 'Languages', items: ['Python', 'TypeScript', 'JavaScript', 'C / C++', 'SQL'] },
   { label: 'AI & LLMs', items: ['LLM agents & function calling', 'RAG & embeddings', 'Vision models (Llama 4 Vision)', 'Prompt & eval design', 'MCP tooling'] },
   { label: 'Backend & Infra', items: ['Node.js', 'FastAPI', 'Serverless (Vercel)', 'Supabase / Postgres', 'REST & webhooks'] },
-  { label: 'Hardware & Systems', items: ['Digital logic (NAND-gate design)', 'Breadboard & embedded prototyping', 'Electronics fundamentals', 'Control logic'] },
+  { label: 'Automation & Workflow', items: ['n8n', 'trigger.dev', 'Webhooks & cron', 'Event-driven pipelines', 'Telegram Bot API'] },
 ]
 
 const APPROACH = [
-  { n: '01', title: 'Scope', text: 'Find the single highest-leverage process worth automating — the one that quietly eats hours every week.' },
-  { n: '02', title: 'Prototype', text: 'A working demo in days, not months. You see the automation run on real inputs before we commit to building it out.' },
-  { n: '03', title: 'Ship with guardrails', text: 'Deploy with input/output validation, tracing, and human approval gates before anything touches a live system.' },
-  { n: '04', title: 'Iterate', text: 'Measure the impact, harden the edges, and hand it off documented — so it keeps working without me in the loop.' },
+  { n: '01', title: 'Make the requirements less dumb', text: 'Every requirement is a hypothesis, not a law — even the ones from smart people. I question each one and tie it to a name that can defend it.' },
+  { n: '02', title: 'Delete the part or step', text: "Cut parts, steps, and code aggressively. If I'm not adding about 10% back later, I didn't cut hard enough." },
+  { n: '03', title: 'Simplify what survives', text: "Only now do I optimise — and only what's left. Polishing something that should have been deleted is wasted work in disguise." },
+  { n: '04', title: 'Accelerate the cycle', text: 'Shorten the loop from change to result. Never before the steps above — speeding up a broken process just produces errors faster.' },
+  { n: '05', title: 'Automate — last', text: 'Hand it to scripts and schedules only once it is simple and fast. Automating a mess just gives you an automated mess.' },
 ]
 
-const TECH = ['OpenAI', 'Anthropic', 'LangChain', 'LlamaIndex', 'MCP', 'RAG', 'FastAPI', 'Supabase', 'Vercel', 'Python', 'TypeScript', 'Selenium']
+const TECH = ['n8n', 'trigger.dev', 'OpenAI', 'Anthropic', 'Groq', 'LangChain', 'LlamaIndex', 'MCP', 'RAG', 'FastAPI', 'Supabase', 'Vercel', 'Python', 'TypeScript', 'Selenium']
+
+const EDGE = [
+  { icon: Ico.shield, title: 'Self-monitoring workflows', text: "Every step checks its own output. On failure it retries with a fallback, and when something genuinely can't be resolved it logs the exact error and pings a human — instead of writing garbage downstream and carrying on as if nothing broke." },
+  { icon: Ico.brain, title: 'Agents that remember', text: "Every run is written to a log the agent reads back, so the system isn't stateless. It builds up context on how you work — and the more you use it, the sharper it gets at turning a loose request into exactly what you meant." },
+]
 
 /* ---------------- Navbar ---------------- */
-const NAV_LINKS = [['What I build', '#services'], ['Work', '#work'], ['Approach', '#approach'], ['About', '#about'], ['Demos', '#demos']]
+const NAV_LINKS = [['What I build', '#services'], ['Work', '#work'], ['Approach', '#approach'], ['Edge', '#edge'], ['About', '#about'], ['Demos', '#demos']]
 
 function Wordmark({ dark = false }) {
   return (
@@ -186,7 +198,7 @@ function Services() {
   return (
     <section id="services" className="py-24 sm:py-32 px-6 sm:px-10 lg:px-16">
       <div className="max-w-7xl mx-auto">
-        <Head index="01" kicker="Capabilities" title="What I build" sub="Three areas where I have working systems in production — not planned, not prototyped, live." />
+        <Head index="01" kicker="Capabilities" title="What I build" sub="The kinds of AI systems I build — from a single tool-calling agent to a full pipeline that runs itself." />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-14">
           {SERVICES.map((s) => {
             const Icon = s.icon
@@ -227,11 +239,13 @@ function Work() {
             </div>
             <h3 className="font-display font-extrabold text-3xl sm:text-4xl leading-tight">LHDN Receipt Tracker</h3>
             <p className="text-white/65 mt-4 leading-relaxed max-w-xl">
-              A zero-setup Telegram bot that turns a receipt photo into a filed, categorised tax record.
-              Groq's Llama 4 Scout vision model extracts shop, date, amount, and currency in a single inference
-              call; a structured prompt maps the result to one of 22 Malaysian LHDN personal relief types or a
-              Form B business expense. Each user gets a private, row-isolated Supabase store — no shared state.
-              Built and deployed end to end in a single day.
+              A zero-setup Telegram bot that turns your receipts into filed Malaysian LHDN tax reliefs — the
+              deductions most people forget to claim. Snap a photo and Groq's Llama 4 Scout vision model reads the
+              shop, date, amount, and currency in a single call, then a structured prompt files it under one of 22
+              LHDN relief types or a Form B business expense. Reliefs come off your chargeable income, not your
+              refund — claim a full year of them and a higher-rate filer can owe up to roughly RM5,000 less tax
+              (≈ US$1,200). Every user gets a private, row-isolated Supabase store, and the whole thing went from
+              idea to live in a single day.
             </p>
             {/* Architecture pipeline */}
             <div className="mt-5 border border-white/10 rounded-xl p-4 bg-white/[0.03]">
@@ -253,7 +267,7 @@ function Work() {
             </div>
           </div>
           <div className="lg:col-span-2 grid grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden">
-            {[['1 day', 'Idea to live'], ['22', 'LHDN relief types'], ['1 photo', 'To a filed record']].map(([n, l]) => (
+            {[['1 day', 'Idea to live'], ['0', 'Steps to set up'], ['0', 'Sign-up needed']].map(([n, l]) => (
               <div key={l} className="bg-dark-soft px-3 py-6 text-center">
                 <div className="font-display font-extrabold text-2xl sm:text-3xl text-accent">{n}</div>
                 <div className="text-white/55 text-[11px] mt-1 leading-tight">{l}</div>
@@ -291,15 +305,40 @@ function Approach() {
   return (
     <section id="approach" className="py-24 sm:py-32 px-6 sm:px-10 lg:px-16">
       <div className="max-w-7xl mx-auto">
-        <Head index="03" kicker="Approach" title="How I work" sub="Small, fast, and accountable. From first call to a system you can hand off." />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-14">
+        <Head index="03" kicker="Approach" title="How I work" sub="I run every build through Elon Musk's five-step engineering algorithm — in this exact order. As he puts it: the most common error of a smart engineer is to optimise a thing that should not exist." />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-5 mt-14">
           {APPROACH.map((step) => (
             <div key={step.n} className="reveal border-t-2 border-ink pt-5">
               <span className="font-mono text-accent-ink bg-accent/20 px-2 py-0.5 rounded text-sm">{step.n}</span>
-              <h3 className="font-display font-bold text-xl text-ink mt-4">{step.title}</h3>
-              <p className="text-muted text-[15px] mt-3 leading-relaxed">{step.text}</p>
+              <h3 className="font-display font-bold text-lg text-ink mt-4 leading-snug">{step.title}</h3>
+              <p className="text-muted text-[14px] mt-3 leading-relaxed">{step.text}</p>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ---------------- Edge / differentiator (dark) ---------------- */
+function Edge() {
+  return (
+    <section id="edge" className="bg-dark text-white py-24 sm:py-32 px-6 sm:px-10 lg:px-16 rounded-t-[2.5rem] grid-faint-dark">
+      <div className="max-w-7xl mx-auto">
+        <Head index="04" kicker="The difference" title="What sets my builds apart" sub="Anyone can wire an API to a model. The difference shows up on run #500, at 3am, when the input is malformed — does the automation fail silently, or catch itself?" dark />
+        <div className="grid md:grid-cols-2 gap-5 mt-14">
+          {EDGE.map((e) => {
+            const Icon = e.icon
+            return (
+              <article key={e.title} className="reveal card-dark p-7 sm:p-8 flex flex-col">
+                <div className="w-12 h-12 rounded-xl bg-accent/15 text-accent flex items-center justify-center">
+                  <Icon className="w-6 h-6" />
+                </div>
+                <h3 className="font-display font-bold text-xl mt-5">{e.title}</h3>
+                <p className="text-white/65 text-[15px] mt-3 leading-relaxed">{e.text}</p>
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>
@@ -317,7 +356,7 @@ function About() {
             alt="Edison Liu"
             className="reveal w-24 h-24 rounded-full object-cover mb-6 border-2 border-line shadow-sm"
           />
-          <Head index="04" kicker="About" title="One engineer, built from the hardware up" />
+          <Head index="05" kicker="About" title="One engineer, built from the hardware up" />
           <div className="reveal text-muted text-lg leading-relaxed mt-6 space-y-5 max-w-2xl">
             <p>
               I'm <span className="text-ink font-semibold">Edison Liu</span>, an Electronic &amp; Computer Engineering
@@ -325,13 +364,15 @@ function About() {
               Illinois Urbana-Champaign.
             </p>
             <p>
-              My background is unusual for someone shipping AI: I came up through hardware. I understand the systems I
-              build all the way down to the logic gates — and that shapes how I reason about everything above them.
+              I learned computing from the bottom up — starting at the logic level and LC-3 assembly, then working up
+              through C, C++, and how a system actually runs end to end. I built a motorised car from a bare breadboard
+              and a working vending machine from nothing but NAND gates, so I understand the stack all the way down to
+              the gates.
             </p>
             <p>
-              I work AI-native: I architect each system, drive the build with Claude Code and MCP tooling, and keep human
-              approval gates before anything reaches production. The tooling accelerates how fast I ship — the requirements,
-              integration, and verification are mine to own.
+              What I optimise for is waste — the energy a system burns, the attention it steals, and the money it quietly
+              costs. The best automation removes work rather than just speeding it up; I would sooner delete a step than
+              automate a bad one.
             </p>
           </div>
           <div className="reveal inline-flex items-center gap-2 mt-8 text-sm font-medium text-ink">
@@ -368,12 +409,15 @@ function About() {
             </div>
           </div>
           <div className="reveal card p-6">
-            <h3 className="eyebrow !text-[11px]">Selected builds</h3>
-            <ul className="mt-4 space-y-3 text-sm text-muted leading-relaxed">
-              <li>Built a motorised car from a bare breadboard — designed the circuit and control logic from first principles.</li>
-              <li>Designed a working vending machine from only NAND gates, implementing coin handling and product selection as pure logic.</li>
-              <li>Led a summer research team in ultracold atomic physics, coordinating the group's experimental work.</li>
-            </ul>
+            <h3 className="eyebrow !text-[11px]">Foundations</h3>
+            <div className="mt-4 space-y-3 text-sm text-muted leading-relaxed">
+              <p><span className="text-ink font-medium">Learned computing from the metal up</span> — LC-3 assembly → C → C++ (OOP).</p>
+              <ul className="space-y-2">
+                <li>Built a motorised car from a bare breadboard.</li>
+                <li>Designed a working vending machine from only NAND gates.</li>
+                <li>Led a summer research team in ultracold atomic physics.</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -420,7 +464,7 @@ function Contact() {
     <section id="contact" className="py-24 sm:py-32 px-6 sm:px-10 lg:px-16">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-start">
         <div>
-          <Head index="06" kicker="Contact" title="Want to build something together?" sub="Whether it's a role, a project, or a technical question — reach out. I respond to everything." />
+          <Head index="07" kicker="Contact" title="Want to build something together?" sub="Whether it's a role, a project, or a technical question — reach out. I respond to everything." />
           <ul className="reveal mt-8 space-y-px border border-line rounded-2xl overflow-hidden bg-line">
             <li className="bg-surface px-5 py-4 flex items-center gap-3">
               <Ico.mail className="w-5 h-5 text-muted" />
@@ -488,9 +532,12 @@ export function Footer() {
     <footer className="bg-dark text-white pt-20 pb-10 px-6 sm:px-10 lg:px-16 rounded-t-[2.5rem]">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-10 items-end pb-14 border-b border-white/10">
-          <h2 className="font-display font-extrabold text-5xl sm:text-7xl leading-[0.92] tracking-tight">
-            Let's build<br />something that runs<span className="text-accent">.</span>
-          </h2>
+          <div>
+            <h2 className="font-display font-extrabold text-5xl sm:text-7xl leading-[0.92] tracking-tight">
+              Let's build<br />something that runs<span className="text-accent">.</span>
+            </h2>
+            <p className="text-white/55 text-base sm:text-lg mt-5 max-w-md leading-relaxed">From zero to a shipped product — automating the work that eats your week.</p>
+          </div>
           <div className="lg:text-right">
             <a href={base + "#contact"} className="btn btn-accent">Get in touch <Ico.arrow className="w-4 h-4" /></a>
           </div>
@@ -543,6 +590,7 @@ export default function App() {
         <Services />
         <Work />
         <Approach />
+        <Edge />
         <About />
         <Demos Head={Head} />
         <Contact />
