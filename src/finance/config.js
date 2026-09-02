@@ -7,7 +7,7 @@
       Paste the /exec URL you get in SETUP-FINANCE.md, Step 6.
       Leave it empty ('') and the tracker still works fully —
       it just stays local-only (localStorage) with no Sheets sync. */
-export const SHEETS_URL = ''
+export const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzF9rGcLqnrX48JQe3oHOJsI49tEbO6BfeDk1w6ZKmj6omphxlfg5mIcUkMEOwK_LM/exec'
 
 /* 2) Where the "back to portfolio" button goes. */
 export const PORTFOLIO_PATH = '/portfolio'
