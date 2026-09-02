@@ -25,9 +25,10 @@ export const CURRENCY_ORDER = ['MYR', 'CNY', 'USD']
 export const BASE_CURRENCY = 'MYR'
 
 /* 5) Fallback FX rates: how much 1 unit of the currency is worth in BASE_CURRENCY.
-      These are SEED values only (mid-market, looked up 2 Sep 2026 — USD/MYR ≈ 4.04,
-      CNY/MYR ≈ 0.60). They are NOT live. Edit them in Settings inside the app,
-      or in the Sheet's `Settings` tab, and the app uses yours instead. */
+      These are only a seed, used before the first sync and when the tracker runs
+      with no Sheets URL. Once connected, the rates come from GOOGLEFINANCE
+      formulas in the Sheet's `Settings` tab and refresh on their own — see
+      "Exchange rates" in SETUP-FINANCE.md. */
 export const DEFAULT_RATES = { MYR: 1, CNY: 0.6, USD: 4.04 }
 
 /* 6) Wallets. `logo` is the filename (without .svg) inside /public/wallets/.
@@ -54,7 +55,7 @@ export const WALLETS = [
 
 /* 7) Categories, per transaction type. Add or remove freely. */
 export const CATEGORIES = {
-  spending: ['Food & drink', 'Groceries', 'Transport', 'Rent', 'Utilities', 'Phone & internet', 'Shopping', 'Health', 'Education', 'Entertainment', 'Travel', 'Fees', 'Other'],
+  spending: ['Food & drink', 'Groceries', 'Transport', 'Rent', 'Utilities', 'Phone & internet', 'Shopping', 'Clothing', 'Health', 'Education', 'Entertainment', 'Travel', 'Fees', 'Other'],
   income:   ['Salary', 'Freelance', 'Bonus', 'Allowance', 'Refund', 'Investment', 'Gift', 'Other'],
   savings:  ['Emergency fund', 'Investment', 'Goal', 'Crypto', 'Other'],
 }

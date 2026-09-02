@@ -31,7 +31,10 @@ var SEED_WALLETS = [
 ];
 
 /* Seed settings. rate_X = how much 1 X is worth in MYR. budget_X = monthly
-   spending cap in that currency, 0 = off. */
+   spending cap in that currency, 0 = off.
+   The rate rows are only a seed: setup() replaces them with GOOGLEFINANCE
+   formulas straight away (see useLiveRates below), so the numbers the website
+   converts with are Google's own and refresh by themselves. */
 var SEED_SETTINGS = [
   ['rate_CNY', 0.6],
   ['rate_USD', 4.04],
@@ -39,6 +42,23 @@ var SEED_SETTINGS = [
   ['budget_CNY', 0],
   ['budget_USD', 0]
 ];
+
+/* ---- Live exchange rates ----
+   BASE_CCY must match BASE_CURRENCY in src/finance/config.js.
+   Every other currency gets a rate cell holding
+     =IFERROR(GOOGLEFINANCE("CURRENCY:<CCY><BASE>"),"")
+   i.e. what 1 unit of it is worth in the base currency. Google recalculates
+   it on its own; the website re-reads it on its next sync (every 60s, and
+   whenever you reopen the tab), so nothing has to be typed in by hand.
+   The IFERROR matters: GOOGLEFINANCE briefly returns #N/A while it fetches,
+   and a blank is something readSettings_ can safely ignore, where an error
+   value would land in the app as a zero rate. */
+var BASE_CCY = 'MYR';
+var LIVE_RATE_CCYS = ['CNY', 'USD'];
+
+function rateFormula_(ccy) {
+  return '=IFERROR(GOOGLEFINANCE("CURRENCY:' + ccy + BASE_CCY + '"),"")';
+}
 
 /* ============================================================
    RUN THIS ONCE — creates the tabs, headers and seed rows.
@@ -73,6 +93,9 @@ function setup() {
   set.getRange(1, 1, 1, 2).setFontWeight('bold');
   set.setFrozenRows(1);
 
+  // Rates come from Google, not from a number somebody typed a month ago.
+  useLiveRates();
+
   var pin = PropertiesService.getScriptProperties().getProperty('PIN');
   SpreadsheetApp.getActive().toast(
     pin ? 'Setup done. PIN is set.' : 'Setup done. NOW SET A PIN: Project Settings → Script Properties → PIN.',
@@ -95,6 +118,70 @@ function writeBalanceFormulas_(wal) {
     ]);
   }
   wal.getRange(2, 5, formulas.length, 1).setFormulas(formulas);
+}
+
+/* ============================================================
+   Exchange rates
+   ============================================================ */
+
+/* Put a GOOGLEFINANCE formula in every non-base rate cell. Run from the
+   Ledger menu, or automatically as part of setup(). Safe to run twice. */
+function useLiveRates() {
+  var sh = sheet_(SET_SHEET);
+  for (var i = 0; i < LIVE_RATE_CCYS.length; i++) {
+    var ccy = LIVE_RATE_CCYS[i];
+    sh.getRange(settingsRow_(sh, 'rate_' + ccy), 2).setFormula(rateFormula_(ccy));
+  }
+  SpreadsheetApp.flush();
+  SpreadsheetApp.getActive().toast(
+    'Exchange rates now come from GOOGLEFINANCE and update on their own.', 'Ledger', 6);
+}
+
+/* The opposite: freeze each rate at whatever it says right now, so you can
+   type your own numbers again. */
+function useManualRates() {
+  var sh = sheet_(SET_SHEET);
+  for (var i = 0; i < LIVE_RATE_CCYS.length; i++) {
+    var cell = sh.getRange(settingsRow_(sh, 'rate_' + LIVE_RATE_CCYS[i]), 2);
+    cell.setValue(Number(cell.getValue()) || 0);
+  }
+  SpreadsheetApp.getActive().toast('Exchange rates are yours to edit again.', 'Ledger', 6);
+}
+
+/* Row number of a Settings key, appending the row if it is not there yet. */
+function settingsRow_(sh, key) {
+  var last = sh.getLastRow();
+  if (last >= 2) {
+    var keys = sh.getRange(2, 1, last - 1, 1).getValues();
+    for (var i = 0; i < keys.length; i++) {
+      if (String(keys[i][0]) === key) return i + 2;
+    }
+  }
+  sh.appendRow([key, '']);
+  return sh.getLastRow();
+}
+
+/* True when at least one rate cell is a formula, i.e. rates are automatic. */
+function ratesAreLive_(sh) {
+  var last = sh.getLastRow();
+  if (last < 2) return false;
+  var keys = sh.getRange(2, 1, last - 1, 1).getValues();
+  var formulas = sh.getRange(2, 2, last - 1, 1).getFormulas();
+  for (var i = 0; i < keys.length; i++) {
+    if (String(keys[i][0]).indexOf('rate_') === 0 && formulas[i][0]) return true;
+  }
+  return false;
+}
+
+/* A Ledger menu on the spreadsheet, so none of this needs the script editor. */
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('Ledger')
+    .addItem('Set up / repair sheet', 'setup')
+    .addSeparator()
+    .addItem('Use live Google rates', 'useLiveRates')
+    .addItem('Use my own rates', 'useManualRates')
+    .addToUi();
 }
 
 /* ============================================================
@@ -190,14 +277,14 @@ function saveSettings_(settings) {
   if (settings && settings.budgets) {
     for (var b in settings.budgets) pairs['budget_' + b] = Number(settings.budgets[b]) || 0;
   }
-  var values = sh.getDataRange().getValues();
   for (var key in pairs) {
-    var found = -1;
-    for (var i = 1; i < values.length; i++) {
-      if (String(values[i][0]) === key) { found = i + 1; break; }
-    }
-    if (found > 0) sh.getRange(found, 2).setValue(pairs[key]);
-    else sh.appendRow([key, pairs[key]]);
+    var row = settingsRow_(sh, key);
+    var cell = sh.getRange(row, 2);
+    // A rate cell holding a GOOGLEFINANCE formula is the live rate. The app
+    // still posts the numbers it happens to be showing, so ignore those
+    // rather than overwriting the formula with a stale snapshot of itself.
+    if (key.indexOf('rate_') === 0 && cell.getFormula()) continue;
+    cell.setValue(pairs[key]);
   }
   return { ok: true };
 }
@@ -254,13 +341,18 @@ function readSettings_() {
     var rows = sh.getRange(2, 1, last - 1, 2).getValues();
     for (var i = 0; i < rows.length; i++) {
       var k = String(rows[i][0] || '');
-      var v = Number(rows[i][1]) || 0;
-      if (k.indexOf('rate_') === 0) rates[k.slice(5)] = v;
-      if (k.indexOf('budget_') === 0) budgets[k.slice(7)] = v;
+      if (k.indexOf('rate_') === 0) {
+        // A live rate is blank for the moment GOOGLEFINANCE takes to answer.
+        // Leaving the key out entirely means the website keeps the last rate
+        // it had, instead of converting everything at zero.
+        var r = Number(rows[i][1]);
+        if (isFinite(r) && r > 0) rates[k.slice(5)] = r;
+      }
+      if (k.indexOf('budget_') === 0) budgets[k.slice(7)] = Number(rows[i][1]) || 0;
     }
   }
-  rates.MYR = 1; // base currency is always 1
-  return { rates: rates, budgets: budgets };
+  rates[BASE_CCY] = 1; // the base currency is always 1 of itself
+  return { rates: rates, budgets: budgets, ratesAuto: ratesAreLive_(sh) };
 }
 
 /* ============================================================

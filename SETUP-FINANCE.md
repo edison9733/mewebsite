@@ -189,10 +189,34 @@ and Wise appear under two currencies and share one logo file each.
 **Categories** — edit `CATEGORIES` in `src/finance/config.js`. Nothing else to
 change; old entries keep whatever category they were saved with.
 
-**Exchange rates** — in the app: gear icon → Settings → Exchange rates → Save.
-They are stored in the `Settings` tab. The seeded values (1 CNY = 0.60 MYR,
-1 USD = 4.04 MYR) are mid-market rates I looked up on 2 September 2026; they are
-a starting point, **not a live feed**. The app never fetches a rate on its own.
+**Exchange rates** — live from Google, by default. `setup()` puts a
+GOOGLEFINANCE formula in each rate row of the `Settings` tab:
+
+```
+rate_CNY   =IFERROR(GOOGLEFINANCE("CURRENCY:CNYMYR"),"")
+rate_USD   =IFERROR(GOOGLEFINANCE("CURRENCY:USDMYR"),"")
+```
+
+Google recalculates those on its own and the site re-reads them on its next
+sync (every 60 seconds, and whenever you reopen the tab), so there is nothing
+to type in and nothing to keep up to date. While a rate is live the Settings
+sheet in the app shows it read-only with a green **Live · Google Finance** dot.
+
+To go back to numbers you control, open the spreadsheet and use the **Ledger**
+menu in the toolbar:
+
+| Menu item | What it does |
+| --- | --- |
+| Set up / repair sheet | Same as running `setup()` |
+| Use live Google rates | Puts the GOOGLEFINANCE formulas back |
+| Use my own rates | Freezes each rate at its current value so you can type over it |
+
+The menu appears after the sheet is reloaded once with the script saved. If
+GOOGLEFINANCE is briefly unavailable the cell reads blank, and the site simply
+keeps the last rate it had rather than converting anything at zero.
+
+Note this is a spreadsheet-side feature: `GOOGLEFINANCE` cannot be called from
+JavaScript, which is why the rate lives in a cell and the site reads the cell.
 
 ---
 
@@ -334,9 +358,6 @@ Being explicit so you know what is missing rather than assuming it is broken:
 
 - **Recurring transaction templates.** Not built. Say the word and I'll add
   saved presets with one-tap entry.
-- **Live exchange rates.** Deliberately not built — it needs a third-party API
-  key and a CSP change, and a stale cached rate is worse than a rate you set
-  yourself and know the age of.
 - **Editing an existing entry.** You can delete and re-add. Inline editing is
   not there yet.
 - **Multiple users.** One passcode, one dataset.
