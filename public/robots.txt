@@ -5,6 +5,9 @@
 # Default: allow normal search crawlers (Googlebot, Bingbot, DuckDuckBot, …)
 User-agent: *
 Allow: /
+# "/" is a private money tracker, not content. Only the exact root is blocked;
+# /portfolio and everything else stays crawlable.
+Disallow: /$
 
 # --- AI / LLM training & scraping crawlers: disallowed ---
 User-agent: GPTBot

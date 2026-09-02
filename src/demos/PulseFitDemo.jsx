@@ -133,7 +133,7 @@ export default function PulseFitDemo() {
         {/* ---------- header ---------- */}
         <section className="relative pt-32 sm:pt-40 pb-16 px-6 sm:px-10 lg:px-16 grid-faint">
           <div className="max-w-7xl mx-auto">
-            <a href="/#demos" className="inline-flex items-center gap-2 text-sm text-muted hover:text-ink transition-colors mb-8">
+            <a href="/portfolio#demos" className="inline-flex items-center gap-2 text-sm text-muted hover:text-ink transition-colors mb-8">
               <span className="rotate-180"><Ico.arrow className="w-4 h-4" /></span> All demos
             </a>
             <p className="eyebrow reveal"><span className="opacity-60">Live demo</span> PulseFit</p>

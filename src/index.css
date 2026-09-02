@@ -129,3 +129,108 @@
   .reveal-ready .reveal { opacity: 1 !important; transform: none !important; }
   .btn:hover svg { transform: none !important; }
 }
+
+/* ============================================================
+   FINANCIAL TRACKER
+   Scoped to .fin so nothing here can leak into the portfolio.
+   Colours live as CSS variables, so the dark/light swap happens
+   in one place instead of on every element.
+   ============================================================ */
+.fin {
+  color-scheme: light;
+  --fin-bg: #FAFAF7;
+  --fin-bg-85: rgba(250, 250, 247, 0.85);
+  --fin-surface: #FFFFFF;
+  --fin-surface-2: #F3F2ED;
+  --fin-text: #0E0F11;
+  --fin-text-2: #52514E;
+  --fin-muted: #6B6F76;
+  --fin-line: #E7E5DF;
+  --fin-accent: #B6F03C;
+  --fin-accent-soft: rgba(182, 240, 60, 0.16);
+  --fin-accent-ink: #16210A;
+  --fin-ring: rgba(182, 240, 60, 0.45);
+  --fin-bar: #2a78d6;           /* single hue for magnitude bars */
+  --fin-shadow: 0 10px 30px -20px rgba(14, 15, 17, 0.35);
+}
+
+html[data-fin-theme="dark"] .fin {
+  color-scheme: dark;
+  --fin-bg: #0E0F11;
+  --fin-bg-85: rgba(14, 15, 17, 0.85);
+  --fin-surface: #16181C;
+  --fin-surface-2: #1E2126;
+  --fin-text: #FFFFFF;
+  --fin-text-2: #C3C2B7;
+  --fin-muted: #9AA0A6;
+  --fin-line: rgba(255, 255, 255, 0.10);
+  --fin-bar: #3987e5;
+  --fin-shadow: 0 12px 34px -18px rgba(0, 0, 0, 0.7);
+}
+
+.fin-topbar { background: var(--fin-bg-85); }
+
+.fin-card {
+  background: var(--fin-surface);
+  border: 1px solid var(--fin-line);
+  border-radius: 1.5rem;
+  box-shadow: var(--fin-shadow);
+}
+
+/* ---- Success animation: green circle + white tick, ~0.6s ---- */
+.fin-burst-card {
+  background: var(--fin-surface);
+  border: 1px solid var(--fin-line);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.45);
+  animation: finPop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+.fin-burst-ring {
+  stroke-dasharray: 151;                     /* 2πr, r = 24 */
+  stroke-dashoffset: 151;
+  animation: finDraw 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.fin-burst-fill {
+  transform-origin: 50% 50%;
+  transform: scale(0);
+  animation: finFill 0.25s cubic-bezier(0.2, 0.8, 0.3, 1.2) 0.28s forwards;
+}
+.fin-burst-tick {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: finDraw 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.35s forwards;
+}
+@keyframes finDraw { to { stroke-dashoffset: 0; } }
+@keyframes finFill { to { transform: scale(1); } }
+@keyframes finPop  { from { opacity: 0; transform: scale(0.86); } to { opacity: 1; transform: scale(1); } }
+
+/* ---- Sheet / modal ---- */
+.fin-sheet { animation: finSlideUp 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.fin-fade  { animation: finFade 0.25s ease both; }
+@keyframes finSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes finFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---- Bars grow from nothing rather than snapping in ---- */
+.fin-grow { animation: finGrow 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both; transition: width 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
+@keyframes finGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.fin-grow { transform-origin: left center; }
+.fin-bar-rise { animation: finRise 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both; transform-origin: bottom center; }
+@keyframes finRise { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+/* ---- Section and list entrances ---- */
+.fin-reveal { animation: finUp 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.fin-reveal:nth-of-type(2) { animation-delay: 0.05s; }
+.fin-reveal:nth-of-type(3) { animation-delay: 0.10s; }
+.fin-reveal:nth-of-type(4) { animation-delay: 0.15s; }
+.fin-reveal:nth-of-type(n+5) { animation-delay: 0.20s; }
+.fin-row { animation: finUp 0.35s ease both; }
+@keyframes finUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ---- Focus visibility (WCAG 2.1 AA) ---- */
+.fin :focus-visible {
+  outline: 2px solid var(--fin-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Date inputs are near-invisible on a dark surface without this. */
+html[data-fin-theme="dark"] .fin input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
