@@ -177,31 +177,90 @@ html[data-fin-theme="dark"] .fin {
   box-shadow: var(--fin-shadow);
 }
 
-/* ---- Success animation: green circle + white tick, ~0.6s ---- */
+/* ---- Success card ---- */
 .fin-burst-card {
   background: var(--fin-surface);
   border: 1px solid var(--fin-line);
   box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.45);
   animation: finPop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
 }
-.fin-burst-ring {
-  stroke-dasharray: 151;                     /* 2πr, r = 24 */
-  stroke-dashoffset: 151;
-  animation: finDraw 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-.fin-burst-fill {
-  transform-origin: 50% 50%;
-  transform: scale(0);
-  animation: finFill 0.25s cubic-bezier(0.2, 0.8, 0.3, 1.2) 0.28s forwards;
-}
-.fin-burst-tick {
-  stroke-dasharray: 40;
-  stroke-dashoffset: 40;
-  animation: finDraw 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.35s forwards;
-}
-@keyframes finDraw { to { stroke-dashoffset: 0; } }
-@keyframes finFill { to { transform: scale(1); } }
 @keyframes finPop  { from { opacity: 0; transform: scale(0.86); } to { opacity: 1; transform: scale(1); } }
+
+/* ---- Success animation ----
+   A vector rebuild of the success_checkmark clip, measured off its own 102
+   frames rather than eyeballed: 150x150 box, centre 74.5, r 55.5, stroke 4.2
+   with round caps, #369A5C.
+
+   The ring is not a simple draw-on. It is a comet: a dash whose head runs
+   about two full turns clockwise from 12 o'clock while its tail does one, so
+   the stroke chases itself round and closes into a ring at 0.85s. That needs
+   both dasharray (the length) and dashoffset (where it starts) animated.
+   The tick strokes on from 0.58s, and at 0.75s the whole mark springs —
+   squashing to 0.90, overshooting to 1.05, settling by 1.42s.
+
+   Vector rather than the .webm it came from: WebKit composites WebM alpha as
+   solid black, so on an iPad the clip would have shown up as a black square.
+   It is also 1.5 kB against 67 kB, and stays crisp at any pixel density. */
+.fin-burst-mark { animation: finMarkPop 1.7s linear both; transform-origin: 50% 50%; }
+.fin-burst-ring { animation: finMarkRing 1.7s linear both; }
+.fin-burst-tick { stroke-dasharray: 100; animation: finMarkTick 1.7s linear both; }
+@keyframes finMarkRing {
+  0.0% { stroke-dasharray: 1.47 98.53; stroke-dashoffset: -0.72; }
+  2.94% { stroke-dasharray: 2.14 97.86; stroke-dashoffset: -3.25; }
+  5.88% { stroke-dasharray: 3.33 96.67; stroke-dashoffset: -6.94; }
+  8.82% { stroke-dasharray: 5.06 94.94; stroke-dashoffset: -11.47; }
+  11.76% { stroke-dasharray: 7.25 92.75; stroke-dashoffset: -17.03; }
+  14.71% { stroke-dasharray: 10.44 89.56; stroke-dashoffset: -23.14; }
+  17.65% { stroke-dasharray: 13.94 86.06; stroke-dashoffset: -30.03; }
+  20.59% { stroke-dasharray: 18.67 81.33; stroke-dashoffset: -37.08; }
+  23.53% { stroke-dasharray: 24.31 75.69; stroke-dashoffset: -44.5; }
+  26.47% { stroke-dasharray: 31.0 69.0; stroke-dashoffset: -52.11; }
+  29.41% { stroke-dasharray: 39.06 60.94; stroke-dashoffset: -59.39; }
+  32.35% { stroke-dasharray: 48.47 51.53; stroke-dashoffset: -66.64; }
+  35.29% { stroke-dasharray: 58.64 41.36; stroke-dashoffset: -73.69; }
+  38.24% { stroke-dasharray: 69.28 30.72; stroke-dashoffset: -80.03; }
+  41.18% { stroke-dasharray: 79.69 20.31; stroke-dashoffset: -85.67; }
+  44.12% { stroke-dasharray: 88.33 11.67; stroke-dashoffset: -90.61; }
+  47.06% { stroke-dasharray: 94.5 5.5; stroke-dashoffset: -94.69; }
+  50.0% { stroke-dasharray: 100.0 0.0; stroke-dashoffset: -97.61; }
+  100.0% { stroke-dasharray: 100.0 0.0; stroke-dashoffset: -97.61; }
+}
+@keyframes finMarkTick {
+  0.0% { stroke-dashoffset: 100; }
+  34.29% { stroke-dashoffset: 100; }
+  36.29% { stroke-dashoffset: 89.9; }
+  38.24% { stroke-dashoffset: 82.2; }
+  40.18% { stroke-dashoffset: 72.1; }
+  42.18% { stroke-dashoffset: 60.4; }
+  44.12% { stroke-dashoffset: 47.7; }
+  46.06% { stroke-dashoffset: 34.7; }
+  48.06% { stroke-dashoffset: 23.2; }
+  50.0% { stroke-dashoffset: 12.4; }
+  51.94% { stroke-dashoffset: 4.8; }
+  54.71% { stroke-dashoffset: 0.0; }
+  100.0% { stroke-dashoffset: 0.0; }
+}
+@keyframes finMarkPop {
+  0.0% { transform: scale(1.0); }
+  43.12% { transform: scale(1.0); }
+  46.06% { transform: scale(0.979); }
+  48.06% { transform: scale(0.95); }
+  50.0% { transform: scale(0.922); }
+  51.94% { transform: scale(0.903); }
+  52.94% { transform: scale(0.9); }
+  54.88% { transform: scale(0.916); }
+  56.88% { transform: scale(0.953); }
+  58.82% { transform: scale(0.997); }
+  60.76% { transform: scale(1.035); }
+  62.76% { transform: scale(1.05); }
+  64.71% { transform: scale(1.043); }
+  66.65% { transform: scale(1.026); }
+  68.65% { transform: scale(1.005); }
+  72.53% { transform: scale(0.98); }
+  77.47% { transform: scale(0.99); }
+  83.35% { transform: scale(1.0); }
+  100.0% { transform: scale(1.0); }
+}
 
 /* ---- Sheet / modal ---- */
 .fin-sheet { animation: finSlideUp 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both; }

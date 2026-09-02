@@ -2,57 +2,86 @@
    Small reusable pieces: logos, icons, the success animation,
    and the charts. Charts are hand-drawn SVG — no chart library.
    ============================================================ */
-import { useEffect, useState, useId } from 'react'
+import { useEffect, useRef, useState, useId } from 'react'
 import { I } from './icons'
 
 /* ---------------- Wallet logo ----------------
-   Tries /wallets/<logo>.svg first. If the file is not there (or fails to
-   load) it falls back to a coloured monogram — so you can drop real SVG
-   logos into public/wallets/ later and they appear with no code change. */
+   Tries /wallets/<logo>.svg and falls back to a coloured monogram, so a new
+   SVG dropped into public/wallets/ needs no code change.
+
+   Two traps here, both of which used to keep every tile on the monogram:
+   • The <img> must never be display:none while it is loading. A hidden image
+     has no layout box, so `loading="lazy"` never starts the fetch, so `load`
+     never fires, so it never becomes visible. The image is therefore always
+     laid out and only faded in with opacity, and it is not lazy.
+   • naturalWidth is not a usable "did it work?" test for SVG. A file with a
+     viewBox but no width/height attributes has no intrinsic size and reports
+     0 even though it renders perfectly. img.decode() answers the real
+     question, and unlike onLoad it also settles for already-cached images. */
 export function WalletLogo({ wallet, size = 36, rounded = 12 }) {
-  // Default to the monogram and only swap in the image once it has actually
-  // decoded. That way a missing file — or a server that answers a missing file
-  // with an HTML page instead of a 404 — still shows something sensible.
-  const [loaded, setLoaded] = useState(false)
+  const [shown, setShown] = useState(false)
+  const [failed, setFailed] = useState(false)
+  const imgRef = useRef(null)
+  const src = wallet?.logo ? `/wallets/${wallet.logo}.svg` : ''
+
+  useEffect(() => {
+    const el = imgRef.current
+    if (!el || !src) return undefined
+    let live = true
+    const ok = () => { if (live) { setShown(true); setFailed(false) } }
+    const bad = () => { if (live) { setShown(false); setFailed(true) } }
+    if (typeof el.decode === 'function') el.decode().then(ok, bad)
+    else if (el.complete) ok()
+    return () => { live = false }
+  }, [src])
+
   const label = wallet?.name || '?'
   const mono = label.replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase() || '?'
+
   return (
     <span
       className="relative inline-flex items-center justify-center overflow-hidden shrink-0 font-display font-bold"
       style={{
         width: size, height: size, borderRadius: rounded,
-        background: loaded ? '#fff' : wallet.color,
+        background: shown ? '#fff' : wallet.color,
         color: wallet.ink ? '#0E0F11' : '#fff',
         fontSize: size * 0.36, letterSpacing: '-0.02em',
-        boxShadow: loaded ? 'inset 0 0 0 1px rgba(0,0,0,0.06)' : 'none',
+        boxShadow: shown ? 'inset 0 0 0 1px rgba(0,0,0,0.06)' : 'none',
+        transition: 'background-color 0.2s ease',
       }}
     >
-      {!loaded && <span aria-hidden="true">{mono}</span>}
-      <img
-        src={`/wallets/${wallet.logo}.svg`}
-        alt=""
-        width={size} height={size}
-        loading="lazy"
-        onLoad={(e) => { if (e.currentTarget.naturalWidth > 0) setLoaded(true) }}
-        className="absolute inset-0 w-full h-full object-contain p-1"
-        style={{ display: loaded ? 'block' : 'none' }}
-      />
+      {!shown && <span aria-hidden="true" className="relative z-[1]">{mono}</span>}
+      {src && !failed && (
+        <img
+          ref={imgRef}
+          src={src}
+          alt=""
+          decoding="async"
+          onLoad={() => setShown(true)}
+          onError={() => { setShown(false); setFailed(true) }}
+          className="absolute inset-0 w-full h-full object-contain p-1 transition-opacity duration-200"
+          style={{ opacity: shown ? 1 : 0 }}
+        />
+      )}
     </span>
   )
 }
 
 /* ---------------- Success animation ----------------
-   Green circle draws in, white tick strokes on. Total ~0.6s.
-   Respects prefers-reduced-motion via the CSS in index.css. */
+   The supplied success_checkmark clip, rebuilt as vector. Every number here
+   was measured off the clip's own frames (see the keyframes in index.css),
+   so it is the same mark and the same timing — it just draws instead of
+   decoding, which is what lets it look right on WebKit too. */
 export function SuccessBurst({ show, label = 'Saved' }) {
   if (!show) return null
   return (
     <div className="fixed inset-0 z-[120] grid place-items-center pointer-events-none" role="status" aria-live="polite">
       <div className="fin-burst-card flex flex-col items-center gap-3 px-8 py-7 rounded-3xl">
-        <svg viewBox="0 0 52 52" className="w-16 h-16 fin-burst">
-          <circle className="fin-burst-ring" cx="26" cy="26" r="24" fill="none" stroke="#16A34A" strokeWidth="3" />
-          <circle className="fin-burst-fill" cx="26" cy="26" r="24" fill="#16A34A" />
-          <path className="fin-burst-tick" d="M15 27.5 22.5 35 37.5 19" fill="none" stroke="#fff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <svg viewBox="0 0 150 150" className="w-20 h-20 fin-burst-mark" aria-hidden="true"
+             fill="none" stroke="#369A5C" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round">
+          <circle className="fin-burst-ring" cx="74.5" cy="74.5" r="55.5"
+                  pathLength="100" transform="rotate(-90 74.5 74.5)" />
+          <path className="fin-burst-tick" d="M55.1 78 L65.5 88.9 L93.9 60.1" pathLength="100" />
         </svg>
         <p className="font-display font-semibold text-[15px] text-[var(--fin-text)]">{label}</p>
       </div>

@@ -159,7 +159,7 @@ function Dashboard({ theme, setTheme, onLock }) {
     setAddOpen(false)
     await addTxn(draft)
     setBurst(true)
-    setTimeout(() => setBurst(false), 950)
+    setTimeout(() => setBurst(false), 1900)
   }
 
   function exportCSV() {
@@ -183,7 +183,9 @@ function Dashboard({ theme, setTheme, onLock }) {
             {fmtBase(grand)}
           </p>
           <p className="mt-2 text-[12.5px] text-[var(--fin-muted)]">
-            Everything converted to {BASE_CURRENCY} at the rates you set — not a live market rate.
+            Everything converted to {BASE_CURRENCY} at {settings.ratesAuto
+              ? 'live Google Finance rates.'
+              : 'the rates you set — not a live market rate.'}
           </p>
 
           <ul className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -610,10 +612,15 @@ function SettingsSheet({ open, onClose, settings, onSave, onExport, onLock, sync
   // start from whatever the sheet last told us.
   const [rates, setRates] = useState(settings.rates)
   const [budgets, setBudgets] = useState(settings.budgets)
+  // The Sheet says whether its rate cells are GOOGLEFINANCE formulas. When
+  // they are, editing them here would only be overwritten on the next sync.
+  const auto = Boolean(settings.ratesAuto)
 
   function save() {
     const clean = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, Number(v) || 0]))
-    onSave({ rates: { ...clean(rates), [BASE_CURRENCY]: 1 }, budgets: clean(budgets) })
+    onSave(auto
+      ? { budgets: clean(budgets) }
+      : { rates: { ...clean(rates), [BASE_CURRENCY]: 1 }, budgets: clean(budgets) })
     onClose()
   }
 
@@ -623,18 +630,27 @@ function SettingsSheet({ open, onClose, settings, onSave, onExport, onLock, sync
         <section>
           <h3 className="font-display font-bold text-[15px] mb-1">Exchange rates</h3>
           <p className="text-[12.5px] text-[var(--fin-muted)] mb-3">
-            How much 1 unit is worth in {BASE_CURRENCY}. These are your numbers — the app never fetches a live rate.
+            {auto
+              ? <>Live from Google Finance, via a GOOGLEFINANCE formula in the Sheet. They refresh on their own — to type your own instead, run <span className="font-mono">Ledger → Use my own rates</span> in the spreadsheet.</>
+              : <>How much 1 unit is worth in {BASE_CURRENCY}. These are your numbers — run <span className="font-mono">Ledger → Use live Google rates</span> in the spreadsheet to have Google keep them current.</>}
           </p>
           <div className="space-y-2">
             {CURRENCY_ORDER.filter((c) => c !== BASE_CURRENCY).map((c) => (
               <label key={c} className="flex items-center gap-3">
                 <span className="w-20 text-[13px] font-mono">1 {c} =</span>
-                <input type="text" inputMode="decimal" value={rates[c] ?? ''} onChange={(e) => setRates({ ...rates, [c]: e.target.value })}
-                  className="flex-1 px-3.5 py-2.5 rounded-xl bg-[var(--fin-surface-2)] border border-[var(--fin-line)] text-sm tabular-nums outline-none focus:border-[var(--fin-accent)] transition" />
+                <input type="text" inputMode="decimal" value={rates[c] ?? ''} readOnly={auto} disabled={auto}
+                  onChange={(e) => setRates({ ...rates, [c]: e.target.value })}
+                  className={`flex-1 px-3.5 py-2.5 rounded-xl bg-[var(--fin-surface-2)] border border-[var(--fin-line)] text-sm tabular-nums outline-none transition
+                    ${auto ? 'opacity-60 cursor-not-allowed' : 'focus:border-[var(--fin-accent)]'}`} />
                 <span className="text-[13px] font-mono text-[var(--fin-muted)]">{BASE_CURRENCY}</span>
               </label>
             ))}
           </div>
+          {auto && (
+            <p className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-[var(--fin-muted)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A]" aria-hidden="true" /> Live · Google Finance
+            </p>
+          )}
         </section>
 
         <section>
