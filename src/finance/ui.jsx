@@ -68,61 +68,21 @@ export function WalletLogo({ wallet, size = 36, rounded = 12 }) {
 }
 
 /* ---------------- Success animation ----------------
-   Plays public/success.webm — a 150x150 VP8 clip with a real alpha channel,
-   so it sits on the card with no box around it.
-
-   WebKit is the catch: Safari plays WebM but composites the alpha as solid
-   black, and there is no feature test for that, only for the codec. So
-   WebKit (and anything that cannot decode WebM at all) gets the hand-drawn
-   tick instead — same timing, no black square. */
-const canPlayAlphaWebm = (() => {
-  let cached
-  return () => {
-    if (cached !== undefined) return cached
-    try {
-      const v = document.createElement('video')
-      const ua = navigator.userAgent || ''
-      const isWebKit = /^((?!chrome|chromium|android|crios|fxios|edg).)*safari/i.test(ua)
-      cached = Boolean(v.canPlayType('video/webm; codecs="vp8"')) && !isWebKit
-    } catch { cached = false }
-    return cached
-  }
-})()
-
+   The supplied success_checkmark clip, rebuilt as vector. Every number here
+   was measured off the clip's own frames (see the keyframes in index.css),
+   so it is the same mark and the same timing — it just draws instead of
+   decoding, which is what lets it look right on WebKit too. */
 export function SuccessBurst({ show, label = 'Saved' }) {
-  const [useVideo, setUseVideo] = useState(() => canPlayAlphaWebm())
-  const videoRef = useRef(null)
-
-  useEffect(() => {
-    if (!show || !useVideo) return undefined
-    const el = videoRef.current
-    if (!el) return undefined
-    el.currentTime = 0
-    const play = el.play?.()
-    if (play && typeof play.catch === 'function') play.catch(() => {})
-    // Some browsers reject an unsupported stream without ever firing `error`.
-    const t = setTimeout(() => { if (el.readyState === 0) setUseVideo(false) }, 700)
-    return () => clearTimeout(t)
-  }, [show, useVideo])
-
   if (!show) return null
   return (
     <div className="fixed inset-0 z-[120] grid place-items-center pointer-events-none" role="status" aria-live="polite">
       <div className="fin-burst-card flex flex-col items-center gap-3 px-8 py-7 rounded-3xl">
-        {useVideo ? (
-          <video
-            ref={videoRef} src="/success.webm"
-            autoPlay muted playsInline preload="auto" aria-hidden="true"
-            onError={() => setUseVideo(false)}
-            className="w-20 h-20 object-contain fin-burst"
-          />
-        ) : (
-          <svg viewBox="0 0 52 52" className="w-16 h-16 fin-burst" aria-hidden="true">
-            <circle className="fin-burst-ring" cx="26" cy="26" r="24" fill="none" stroke="#16A34A" strokeWidth="3" />
-            <circle className="fin-burst-fill" cx="26" cy="26" r="24" fill="#16A34A" />
-            <path className="fin-burst-tick" d="M15 27.5 22.5 35 37.5 19" fill="none" stroke="#fff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        )}
+        <svg viewBox="0 0 150 150" className="w-20 h-20 fin-burst-mark" aria-hidden="true"
+             fill="none" stroke="#369A5C" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round">
+          <circle className="fin-burst-ring" cx="74.5" cy="74.5" r="55.5"
+                  pathLength="100" transform="rotate(-90 74.5 74.5)" />
+          <path className="fin-burst-tick" d="M55.1 78 L65.5 88.9 L93.9 60.1" pathLength="100" />
+        </svg>
         <p className="font-display font-semibold text-[15px] text-[var(--fin-text)]">{label}</p>
       </div>
     </div>
