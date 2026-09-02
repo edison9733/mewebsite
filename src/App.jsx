@@ -90,7 +90,7 @@ const NAV_LINKS = [['What I build', '#services'], ['Work', '#work'], ['Approach'
 
 function Wordmark({ dark = false }) {
   return (
-    <a href="/" className="inline-flex items-center gap-2 group">
+    <a href="/portfolio" className="inline-flex items-center gap-2 group">
       <span className={`font-display font-extrabold text-[19px] tracking-tight ${dark ? 'text-white' : 'text-ink'}`}>edison9733</span>
       <span className="w-2 h-2 rounded-full bg-accent group-hover:scale-125 transition-transform" />
     </a>
@@ -101,7 +101,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const [solid, setSolid] = useState(false)
   const { pathname } = useLocation()
-  const base = pathname === '/' ? '' : '/'
+  const base = pathname === '/portfolio' ? '' : '/portfolio'
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 24)
     onScroll(); window.addEventListener('scroll', onScroll)
@@ -537,7 +537,7 @@ function Contact() {
 /* ---------------- Footer ---------------- */
 export function Footer() {
   const { pathname } = useLocation()
-  const base = pathname === '/' ? '' : '/'
+  const base = pathname === '/portfolio' ? '' : '/portfolio'
   return (
     <footer className="bg-dark text-white pt-20 pb-10 px-6 sm:px-10 lg:px-16 rounded-t-[2.5rem]">
       <div className="max-w-7xl mx-auto">

@@ -6,6 +6,17 @@ signal accent.
 
 **Live:** https://edison9733.xyz
 
+## Two interfaces
+
+| Route | What it is |
+|---|---|
+| `/` | **Ledger** — a private multi-currency money tracker (MYR / CNY / USD), synced two-way with Google Sheets. |
+| `/portfolio` | The portfolio site below. One click away from the tracker, and the page search engines index. |
+| `/demos/pulsefit` | The PulseFit booking demo. |
+
+Ledger setup — the Google Sheet, the passcode, the wallet logos — is in
+[SETUP-FINANCE.md](SETUP-FINANCE.md).
+
 ## Stack
 React 19 + Vite + Tailwind CSS. No icon or animation libraries — icons are inline
 SVG and scroll reveals use a small IntersectionObserver hook, so the bundle stays
@@ -13,13 +24,24 @@ lean and there are no extra dependencies to break.
 
 ```
 src/
-  App.jsx        # the whole site (nav, hero, services, work, approach, about, contact, footer)
-  index.css      # Tailwind layers + studio tokens (buttons, cards, reveal)
-  main.jsx       # React entry (BrowserRouter, single route)
+  App.jsx        # the portfolio (nav, hero, services, work, approach, about, contact, footer)
+  index.css      # Tailwind layers + studio tokens + the tracker's .fin theme
+  main.jsx       # React entry (BrowserRouter, routes)
+  finance/
+    config.js    # wallets, currencies, categories, Sheets URL — the file you edit
+    api.js       # Apps Script client + offline write queue
+    store.jsx    # React context, localStorage, sync loop
+    math.js      # balances, period ranges, percentages, CSV (pure functions)
+    icons.jsx    # inline SVG icons
+    ui.jsx       # logo tile, success animation, charts, bottom sheet
+    Tracker.jsx  # the tracker page
+apps-script/
+  Code.gs        # paste into Google Apps Script — the Sheets backend
 api/
   contact.js     # serverless contact endpoint (stores submissions to a private inbox)
 public/
   CNAME          # edison9733.xyz
+  wallets/       # drop bank logo SVGs here (see the README inside)
 index.html       # head, fonts, meta
 tailwind.config.js  # studio palette + fonts
 vercel.json      # SPA rewrites + security headers
