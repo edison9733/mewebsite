@@ -10,10 +10,8 @@ import { WALLETS, walletById, BASE_CURRENCY, CURRENCY_ORDER } from './config'
 export const configOpenings = () => Object.fromEntries(WALLETS.map((w) => [w.id, Number(w.opening) || 0]))
 
 /* ---------------- Date helpers ---------------- */
-export const todayISO = () => {
-  const d = new Date()
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
+const isoOfDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+export const todayISO = () => isoOfDate(new Date())
 const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate())
 /* Monday-start week. */
 const startOfWeek = (d) => {
@@ -91,9 +89,66 @@ export function currencyTotals(txns, openings) {
 
 export const toBase = (amount, currency, rates) => (Number(amount) || 0) * (Number(rates?.[currency]) || (currency === BASE_CURRENCY ? 1 : 0))
 
+/* Inverse of toBase — how much a base-currency amount is worth in another
+   currency, for displaying the total in whichever currency the user picks. */
+export const fromBase = (baseAmount, currency, rates) => {
+  const amt = Number(baseAmount) || 0
+  if (currency === BASE_CURRENCY) return amt
+  const r = Number(rates?.[currency])
+  return r ? amt / r : 0
+}
+
 export const grandTotal = (txns, rates, openings) => {
   const totals = currencyTotals(txns, openings)
   return CURRENCY_ORDER.reduce((s, c) => s + toBase(totals[c], c, rates), 0)
+}
+
+/* Total balance (base currency) at the end of each day, oldest first —
+   anchored on the earliest transaction (or today, with no history yet)
+   and capped to the last `windowDays` so a long history stays a fast,
+   readable chart instead of thousands of points. */
+export function balanceSeries(txns, rates, openings = configOpenings(), windowDays = 90) {
+  const byDate = new Map()
+  txns.forEach((t) => {
+    if (!byDate.has(t.date)) byDate.set(t.date, [])
+    byDate.get(t.date).push(t)
+  })
+  const today = todayISO()
+  const todayD = parseISO(today)
+  const earliestISO = [...byDate.keys()].sort()[0]
+  const earliest = earliestISO ? parseISO(earliestISO) : todayD
+  const windowStart = new Date(todayD)
+  windowStart.setDate(windowStart.getDate() - (windowDays - 1))
+  const start = earliest < windowStart ? windowStart : earliest
+
+  const bal = {}
+  WALLETS.forEach((w) => { bal[w.id] = Number(openings[w.id] ?? w.opening) || 0 })
+  const apply = (t) => {
+    const amt = Number(t.amount) || 0
+    if (t.type === 'income' && t.wallet in bal) bal[t.wallet] += amt
+    else if (t.type === 'spending' && t.wallet in bal) bal[t.wallet] -= amt
+    else if (t.type === 'savings' && t.toWallet) {
+      if (t.wallet in bal) bal[t.wallet] -= amt
+      if (t.toWallet in bal) bal[t.toWallet] += amt
+    }
+  }
+  // Fold in everything that happened before the visible window so the
+  // chart starts from the correct running balance, not from zero.
+  txns.forEach((t) => { if (parseISO(t.date) < start) apply(t) })
+
+  const out = []
+  const cursor = new Date(start)
+  while (cursor <= todayD) {
+    const iso = isoOfDate(cursor)
+    ;(byDate.get(iso) || []).forEach(apply)
+    const totals = {}
+    CURRENCY_ORDER.forEach((c) => { totals[c] = 0 })
+    WALLETS.forEach((w) => { totals[w.currency] += bal[w.id] })
+    const value = CURRENCY_ORDER.reduce((s, c) => s + toBase(totals[c], c, rates), 0)
+    out.push({ date: iso, value })
+    cursor.setDate(cursor.getDate() + 1)
+  }
+  return out
 }
 
 /* Income / spending / savings inside one period, in base currency,

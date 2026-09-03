@@ -10,14 +10,14 @@ import {
 import * as api from './api'
 import { FinanceProvider, useFinance } from './store'
 import {
-  walletBalances, currencyTotals, grandTotal, periodTotals, periodLabel,
+  walletBalances, currencyTotals, grandTotal, fromBase, balanceSeries, periodTotals, periodLabel,
   categoryBreakdown, walletBreakdown, series, pctChange, fmtMoney, toCSV,
   todayISO, periodRange, parseISO,
 } from './math'
 import { I } from './icons'
 import {
   WalletLogo, SuccessBurst, Segmented, CompositionBar, RankedBars,
-  ComparisonBars, Meter, Sheet,
+  ComparisonBars, Meter, Sheet, BalanceLine,
 } from './ui'
 
 /* Validated categorical slots (see the dataviz palette): aqua / blue / red,
@@ -26,6 +26,8 @@ const SERIES_LIGHT = { income: '#1baf7a', savings: '#2a78d6', spending: '#e34948
 const SERIES_DARK  = { income: '#199e70', savings: '#3987e5', spending: '#e66767' }
 
 const THEME_KEY = 'fin_theme_v1'
+const BAL_CCY_KEY = 'fin_balance_ccy_v1'
+const BAL_HIDDEN_KEY = 'fin_balance_hidden_v1'
 const PERIODS = [{ value: 'week', label: 'Week' }, { value: 'month', label: 'Month' }, { value: 'year', label: 'Year' }]
 
 /* ============================================================
@@ -134,14 +136,25 @@ function Dashboard({ theme, setTheme, onLock }) {
   const [setOpen, setSetOpen] = useState(false)
   const [burst, setBurst] = useState(false)
   const [breakType, setBreakType] = useState('spending')
+  const [balCcy, setBalCcy] = useState(() => {
+    try { return localStorage.getItem(BAL_CCY_KEY) || BASE_CURRENCY } catch { return BASE_CURRENCY }
+  })
+  const [balHidden, setBalHidden] = useState(() => {
+    try { return localStorage.getItem(BAL_HIDDEN_KEY) === '1' } catch { return false }
+  })
+
+  useEffect(() => { try { localStorage.setItem(BAL_CCY_KEY, balCcy) } catch { /* ignore */ } }, [balCcy])
+  useEffect(() => { try { localStorage.setItem(BAL_HIDDEN_KEY, balHidden ? '1' : '0') } catch { /* ignore */ } }, [balHidden])
 
   const rates = settings.rates
   const colors = theme === 'dark' ? SERIES_DARK : SERIES_LIGHT
   const fmtBase = useCallback((n) => fmtMoney(n, BASE_CURRENCY), [])
+  const fmtBal = useCallback((n) => fmtMoney(fromBase(n, balCcy, rates), balCcy), [balCcy, rates])
 
   const balances   = useMemo(() => walletBalances(txns, openings), [txns, openings])
   const totals     = useMemo(() => currencyTotals(txns, openings), [txns, openings])
   const grand      = useMemo(() => grandTotal(txns, rates, openings), [txns, rates, openings])
+  const balHistory = useMemo(() => balanceSeries(txns, rates, openings, 90), [txns, rates, openings])
   const cur        = useMemo(() => periodTotals(txns, kind, offset, rates), [txns, kind, offset, rates])
   const prev       = useMemo(() => periodTotals(txns, kind, offset - 1, rates), [txns, kind, offset, rates])
   const cats       = useMemo(() => categoryBreakdown(txns, kind, offset, rates, breakType), [txns, kind, offset, rates, breakType])
@@ -178,12 +191,21 @@ function Dashboard({ theme, setTheme, onLock }) {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
         {/* ---------- Total balance ---------- */}
         <section className="fin-reveal" aria-labelledby="bal-h">
-          <h1 id="bal-h" className="text-[12px] font-mono uppercase tracking-[0.14em] text-[var(--fin-muted)]">Total balance</h1>
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <h1 id="bal-h" className="text-[12px] font-mono uppercase tracking-[0.14em] text-[var(--fin-muted)]">Total balance</h1>
+            <div className="flex items-center gap-1.5">
+              <Segmented ariaLabel="Balance currency" options={CURRENCY_ORDER.map((c) => ({ value: c, label: c }))}
+                         value={balCcy} onChange={setBalCcy} />
+              <IconBtn label={balHidden ? 'Show balance' : 'Hide balance'} onClick={() => setBalHidden((v) => !v)}>
+                {balHidden ? <I.eyeOff className="w-[18px] h-[18px]" /> : <I.eye className="w-[18px] h-[18px]" />}
+              </IconBtn>
+            </div>
+          </div>
           <p className="mt-1.5 font-display font-extrabold tracking-tight text-[clamp(2.1rem,9vw,3.4rem)] tabular-nums leading-none">
-            {fmtBase(grand)}
+            {balHidden ? '••••••••' : fmtBal(grand)}
           </p>
           <p className="mt-2 text-[12.5px] text-[var(--fin-muted)]">
-            Everything converted to {BASE_CURRENCY} at {settings.ratesAuto
+            Everything converted to {balCcy} at {settings.ratesAuto
               ? 'live Google Finance rates.'
               : 'the rates you set — not a live market rate.'}
           </p>
@@ -326,6 +348,24 @@ function Dashboard({ theme, setTheme, onLock }) {
                 {periodTxns.map((t) => <TxnRow key={t.id} t={t} colors={colors} onDelete={() => removeTxn(t.id)} />)}
               </ul>
             )}
+        </section>
+
+        {/* ---------- Balance over time ---------- */}
+        <section className="mt-4 fin-card p-5 sm:p-6 fin-reveal" aria-labelledby="hist-h">
+          <div className="flex items-center justify-between gap-3 flex-wrap mb-1">
+            <h2 id="hist-h" className="font-display font-bold text-base">Balance over time</h2>
+            <div className="flex items-center gap-1.5">
+              <Segmented ariaLabel="Balance chart currency" options={CURRENCY_ORDER.map((c) => ({ value: c, label: c }))}
+                         value={balCcy} onChange={setBalCcy} />
+              <IconBtn label={balHidden ? 'Show balance' : 'Hide balance'} onClick={() => setBalHidden((v) => !v)}>
+                {balHidden ? <I.eyeOff className="w-[18px] h-[18px]" /> : <I.eye className="w-[18px] h-[18px]" />}
+              </IconBtn>
+            </div>
+          </div>
+          <p className="text-[12.5px] text-[var(--fin-muted)] mb-4">
+            {balHistory.length > 1 ? `Last ${balHistory.length} days, in ${balCcy}.` : `In ${balCcy}.`}
+          </p>
+          <BalanceLine points={balHistory} hidden={balHidden} color={colors.income} format={fmtBal} />
         </section>
 
         <footer className="mt-10 text-center">
