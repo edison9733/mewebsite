@@ -266,6 +266,77 @@ export function ComparisonBars({ data, colors, format }) {
   )
 }
 
+/* ============================================================
+   CHART 4 — Balance over time (line + soft area fill)
+   One continuous series in a single currency (the caller converts).
+   Hovering (or dragging a finger across, on touch) reads out the
+   exact value for that day. `hidden` swaps the line for a plain
+   dashed rule and blanks the readout, for the balance-privacy toggle.
+   ============================================================ */
+export function BalanceLine({ points, format, hidden = false, color = 'var(--fin-bar)', height = 160 }) {
+  const [hover, setHover] = useState(null)
+  const uid = useId()
+  if (!points.length) return <p className="text-sm text-[var(--fin-muted)] py-8 text-center">Not enough history yet.</p>
+
+  const W = 600, H = height, PAD = 8
+  const values = points.map((p) => p.value)
+  const min = Math.min(...values)
+  const max = Math.max(...values)
+  const span = max - min || 1
+  const x = (i) => (points.length === 1 ? W / 2 : PAD + (i / (points.length - 1)) * (W - PAD * 2))
+  const y = (v) => PAD + (1 - (v - min) / span) * (H - PAD * 2)
+
+  const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${x(i).toFixed(2)} ${y(p.value).toFixed(2)}`).join(' ')
+  const areaPath = `${linePath} L ${x(points.length - 1).toFixed(2)} ${H - PAD} L ${x(0).toFixed(2)} ${H - PAD} Z`
+  const shown = points[hover ?? points.length - 1]
+  const fmtDate = (iso) => new Date(`${iso}T00:00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })
+
+  function pointFromClientX(clientX, rect) {
+    const px = ((clientX - rect.left) / rect.width) * W
+    let closest = 0, dist = Infinity
+    points.forEach((p, i) => { const d = Math.abs(x(i) - px); if (d < dist) { dist = d; closest = i } })
+    return closest
+  }
+
+  return (
+    <div>
+      <div className="mb-1 flex items-baseline gap-2 min-h-[22px]">
+        <span className="text-[12.5px] font-mono tabular-nums text-[var(--fin-muted)]">{hidden ? '' : fmtDate(shown.date)}</span>
+        <span className="text-[15px] font-display font-bold tabular-nums">{hidden ? '••••••' : format(shown.value)}</span>
+      </div>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full touch-none" style={{ height }} preserveAspectRatio="none"
+        onMouseMove={(e) => setHover(pointFromClientX(e.clientX, e.currentTarget.getBoundingClientRect()))}
+        onMouseLeave={() => setHover(null)}
+        onTouchMove={(e) => { const t = e.touches[0]; if (t) setHover(pointFromClientX(t.clientX, e.currentTarget.getBoundingClientRect())) }}
+        onTouchEnd={() => setHover(null)}
+        role="img"
+        aria-label={hidden ? 'Balance chart hidden' : `Balance from ${format(points[0].value)} on ${fmtDate(points[0].date)} to ${format(points[points.length - 1].value)} today`}
+      >
+        <defs>
+          <linearGradient id={`${uid}-fill`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.28" />
+            <stop offset="100%" stopColor={color} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        {hidden
+          ? <path d={`M ${PAD} ${H / 2} L ${W - PAD} ${H / 2}`} stroke="var(--fin-line)" strokeWidth="2" strokeDasharray="4 6" />
+          : (
+            <>
+              <path d={areaPath} fill={`url(#${uid}-fill)`} stroke="none" />
+              <path d={linePath} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+              {hover != null && <line x1={x(hover)} x2={x(hover)} y1={PAD} y2={H - PAD} stroke="var(--fin-line)" strokeWidth="1" />}
+              {hover != null && <circle cx={x(hover)} cy={y(points[hover].value)} r="4" fill={color} stroke="var(--fin-surface)" strokeWidth="2" />}
+            </>
+          )}
+      </svg>
+      <div className="flex justify-between mt-1 text-[11px] font-mono text-[var(--fin-muted)]">
+        <span>{fmtDate(points[0].date)}</span>
+        <span>Today</span>
+      </div>
+    </div>
+  )
+}
+
 function TableToggle({ on, onClick }) {
   return (
     <button type="button" onClick={onClick}
