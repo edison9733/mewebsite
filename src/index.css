@@ -293,3 +293,78 @@ html[data-fin-theme="dark"] .fin {
 
 /* Date inputs are near-invisible on a dark surface without this. */
 html[data-fin-theme="dark"] .fin input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+/* ============================================================
+   REVISION
+   The study division, at "/study". Scoped to .stu on the same
+   pattern as the ledger: one set of CSS variables per theme, so
+   the dark swap happens here and nowhere else. The surfaces are
+   deliberately identical to the ledger's — the chart palettes
+   were validated against these exact two colours.
+   ============================================================ */
+.stu {
+  color-scheme: light;
+  --stu-bg: #FAFAF7;
+  --stu-bg-85: rgba(250, 250, 247, 0.85);
+  --stu-surface: #FFFFFF;
+  --stu-surface-2: #F3F2ED;
+  --stu-text: #0E0F11;
+  --stu-text-2: #52514E;
+  --stu-muted: #6B6F76;
+  --stu-line: #E7E5DF;
+  --stu-accent: #B6F03C;
+  --stu-accent-soft: rgba(182, 240, 60, 0.16);
+  --stu-accent-ink: #16210A;
+  --stu-ring: rgba(182, 240, 60, 0.45);
+  --stu-shadow: 0 10px 30px -20px rgba(14, 15, 17, 0.35);
+}
+
+html[data-stu-theme="dark"] .stu {
+  color-scheme: dark;
+  --stu-bg: #0E0F11;
+  --stu-bg-85: rgba(14, 15, 17, 0.85);
+  --stu-surface: #16181C;
+  --stu-surface-2: #1E2126;
+  --stu-text: #FFFFFF;
+  --stu-text-2: #C3C2B7;
+  --stu-muted: #9AA0A6;
+  --stu-line: rgba(255, 255, 255, 0.10);
+  --stu-shadow: 0 12px 34px -18px rgba(0, 0, 0, 0.7);
+}
+
+.stu-topbar { background: var(--stu-bg-85); }
+
+.stu-card {
+  background: var(--stu-surface);
+  border: 1px solid var(--stu-line);
+  border-radius: 1.5rem;
+  box-shadow: var(--stu-shadow);
+}
+
+.stu-burst-card {
+  background: var(--stu-surface);
+  border: 1px solid var(--stu-line);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.45);
+  animation: finPop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+
+.stu-sheet { animation: finSlideUp 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.stu-fade  { animation: finFade 0.25s ease both; }
+
+.stu-grow { animation: finGrow 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both; transform-origin: left center; transition: width 0.45s cubic-bezier(0.22, 0.61, 0.36, 1); }
+.stu-rise { animation: finRise 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both; transform-origin: bottom center; }
+
+.stu-reveal { animation: finUp 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.stu-reveal:nth-of-type(2) { animation-delay: 0.05s; }
+.stu-reveal:nth-of-type(3) { animation-delay: 0.10s; }
+.stu-reveal:nth-of-type(4) { animation-delay: 0.15s; }
+.stu-reveal:nth-of-type(n+5) { animation-delay: 0.20s; }
+.stu-row { animation: finUp 0.35s ease both; }
+
+.stu :focus-visible {
+  outline: 2px solid var(--stu-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+html[data-stu-theme="dark"] .stu input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }

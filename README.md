@@ -6,11 +6,12 @@ signal accent.
 
 **Live:** https://edison9733.xyz
 
-## Two interfaces
+## Divisions
 
 | Route | What it is |
 |---|---|
 | `/` | **Ledger** — a private multi-currency money tracker (MYR / CNY / USD), synced two-way with Google Sheets. |
+| `/study` | **Revision** — active recall and spaced repetition: log what you learnt, get told when to see it again, drag the class schedule into shape, and track exam readiness. |
 | `/portfolio` | The portfolio site below. One click away from the tracker, and the page search engines index. |
 | `/demos/pulsefit` | The PulseFit booking demo. |
 
@@ -25,7 +26,7 @@ lean and there are no extra dependencies to break.
 ```
 src/
   App.jsx        # the portfolio (nav, hero, services, work, approach, about, contact, footer)
-  index.css      # Tailwind layers + studio tokens + the tracker's .fin theme
+  index.css      # Tailwind layers + studio tokens + the .fin and .stu themes
   main.jsx       # React entry (BrowserRouter, routes)
   finance/
     config.js    # wallets, currencies, categories, Sheets URL — the file you edit
@@ -35,6 +36,13 @@ src/
     icons.jsx    # inline SVG icons
     ui.jsx       # logo tile, success animation, charts, bottom sheet
     Tracker.jsx  # the tracker page
+  study/
+    config.js    # subjects, the validated chart palettes, the review ladder
+    srs.js       # spaced repetition, dates, dashboard statistics (pure functions)
+    store.jsx    # React context + localStorage (no server, works offline)
+    icons.jsx    # the shared icon set plus the ones revision needs
+    ui.jsx       # charts, bottom sheet, drag-to-reorder list
+    Study.jsx    # the revision page
 apps-script/
   Code.gs        # paste into Google Apps Script — the Sheets backend
 api/

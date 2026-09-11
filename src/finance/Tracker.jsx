@@ -368,7 +368,10 @@ function Dashboard({ theme, setTheme, onLock }) {
           <BalanceLine points={balHistory} hidden={balHidden} color={colors.income} format={fmtBal} />
         </section>
 
-        <footer className="mt-10 text-center">
+        <footer className="mt-10 flex items-center justify-center gap-5">
+          <Link to="/study" className="inline-flex items-center gap-1.5 text-[13px] text-[var(--fin-muted)] hover:text-[var(--fin-text)] transition-colors">
+            Revision <I.arrowUR className="w-3.5 h-3.5" />
+          </Link>
           <Link to={PORTFOLIO_PATH} className="inline-flex items-center gap-1.5 text-[13px] text-[var(--fin-muted)] hover:text-[var(--fin-text)] transition-colors">
             edison9733 portfolio <I.arrowUR className="w-3.5 h-3.5" />
           </Link>
@@ -414,6 +417,12 @@ function TopBar({ theme, setTheme, sync, queued, onRefresh, onSettings }) {
             {theme === 'dark' ? <I.sun className="w-[18px] h-[18px]" /> : <I.moon className="w-[18px] h-[18px]" />}
           </IconBtn>
           <IconBtn label="Settings" onClick={onSettings}><I.gear className="w-[18px] h-[18px]" /></IconBtn>
+          <Link to="/study" title="Revision"
+            className="hidden sm:inline-flex items-center px-3 py-2 rounded-full border border-[var(--fin-line)]
+                       font-display font-semibold text-[13px] text-[var(--fin-text-2)] hover:text-[var(--fin-text)]
+                       hover:border-[var(--fin-text-2)] transition-colors">
+            Revision
+          </Link>
           <Link to={PORTFOLIO_PATH}
             className="ml-1 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[var(--fin-text)] text-[var(--fin-bg)]
                        font-display font-semibold text-[13px] transition-transform duration-200 hover:scale-[1.03] active:scale-95">
